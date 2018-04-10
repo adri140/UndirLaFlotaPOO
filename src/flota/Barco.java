@@ -2,11 +2,11 @@ package flota;
 
 public class Barco {
 	private int numPlayer;
-	private Barco2 lanchas;
-	private Barco3 submarino;
-	private Barco3 destructor;
-	private Barco4 acorazado;
-	private Barco5 portaviones;
+	private Barco2 lanchas = new Barco2();
+	private Barco3 submarino = new Barco3();
+	private Barco3 destructor = new Barco3();
+	private Barco4 acorazado = new Barco4();
+	private Barco5 portaviones = new Barco5();
 	
 	//constructor
 	public Barco(int Player) {
@@ -106,21 +106,36 @@ public class Barco {
 	public boolean comprPor(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(portaviones.getX1(), portaviones.getY1(), 5, tablero, portaviones.getDireccion());
+		if(ok) portaviones.calPosiciones(); //revisar
 		return ok;
 	}
 	
 	private boolean comprovar(int x1, int y1, int pos, Tab tablero, int direc) {
-		boolean ok = true;
+		boolean ok = false;
+		int posx = 0;
+		int posy = 0;
 		switch(direc) {
+		case 0:
+			posx = x1;
+			posy = y1 + pos;
+			break;
 		case 1:
-			y1 = y1 - pos;
+			posx = x1;
+			posy = y1;
+			y1 = y1 - (pos - 1);
 			break;
 		case 2:
-			x1 = x1 - pos;
+			posx = x1;
+			posy = y1;
+			x1 = x1 - (pos - 1);
+			break;
+		case 3:
+			posx = x1 + pos;
+			posy = y1;
 		}
-		if(x1 >= 0 && x1 < tablero.getMax() && y1 >= 0 && y1 < tablero.getMax()) {
+		if((x1 >= 0 && x1 < tablero.getMax()) && (y1 >= 0 && y1 < tablero.getMax()) && (posx >= 0 && posx < tablero.getMax()) && (posy >= 0 && posy < tablero.getMax())) {
 			ok = comprovarPosiciones(x1, y1, pos, tablero, direc);
-			if(ok) escribir(tablero, x1, y1, pos, direc);
+			if(ok) escribir(tablero, x1, y1, direc, pos);
 		}
 		return ok;
 	}
@@ -143,9 +158,7 @@ public class Barco {
 					y1++;
 				}
 			}
-			if(ok && y1 <= tablero.getMax() - 1) {
-				if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B') ok = false;
-			}
+			if(ok && y1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B') ok = false;
 		}
 		else {
 			if(x1 == 0 && y1 == tablero.getMax() - 1) {
@@ -161,9 +174,7 @@ public class Barco {
 							y1++;
 						}
 					}
-					if(ok && y1 <= tablero.getMax() - 1) {
-						if(map[x1][y1] == 'B' && map[x1 - 1][y1] == 'B') ok = false;
-					}
+					if(ok && y1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' && map[x1 - 1][y1] == 'B') ok = false;
 				}
 				else {
 					if(x1 == tablero.getMax() - 1 && y1 == tablero.getMax() - 1) {
@@ -179,22 +190,18 @@ public class Barco {
 									y1++;
 								}
 							}
-							if(ok && y1 <= tablero.getMax() - 1) {
-								if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B') ok = false;
-							}
+							if(ok && y1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B') ok = false;
 						}
 						else {
 							if(x1 == tablero.getMax() - 1) {
 								while(pos > 0 && ok && y1 <= tablero.getMax() - 1) {
-									if(map[x1][y1] == 'B' || map [x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+									if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 									else {
 										pos--;
 										y1++;
 									}
 								}
-								if(ok && y1 <= tablero.getMax() - 1) {
-									if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
-								}
+								if(ok && y1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 							}
 							else {
 								if(y1 == 0) {
@@ -222,7 +229,7 @@ public class Barco {
 													y1++;
 												}
 											}
-											if(ok && y1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+											if(ok && y1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 										}
 									}
 								}
@@ -245,7 +252,7 @@ public class Barco {
 					pos--;
 					x1++;
 				}
-				if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+				if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
 			}
 		}
 		else {
@@ -256,7 +263,7 @@ public class Barco {
 						pos--;
 						x1++;
 					}
-					if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+					if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 				}
 			}
 			else {
@@ -265,7 +272,7 @@ public class Barco {
 					else if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
 				}
 				else {
-					if(x1 == tablero.getMax() - 1 && y1 == tablero.getMax() - 1) {
+					if((x1 == tablero.getMax() - 1) && (y1 == tablero.getMax() - 1)) {
 						if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 - 1] == 'B') ok = false;
 						else if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 					}
@@ -297,7 +304,7 @@ public class Barco {
 												x1++;
 											}
 										}
-										if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+										if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
 									}
 								}
 								else {
@@ -311,7 +318,7 @@ public class Barco {
 													x1++;
 												}
 											}
-											if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+											if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 										}
 									}
 									else {
@@ -340,14 +347,14 @@ public class Barco {
 	private void escribir(Tab tablero, int x1, int y1, int dir, int pos) {
 		char[][] map = tablero.getTablero();
 		if(dir == 0 || dir == 1) {
-			while(pos > 1) {
+			while(pos > 0) {
 				map[x1][y1] = 'B';
 				y1++;
 				pos--;
 			}
 		}
 		else {
-			while(pos > 1) {
+			while(pos > 0) {
 				map[x1][y1] = 'B';
 				x1++; //ojooooooooooo
 				pos--;

@@ -114,7 +114,10 @@ public class Tab {
 	}*/
 	
 	public void viewTab() {
-		System.out.print("   A B C D E F G H I J K L M");
+		System.out.print("   ");
+		for(int p = 0; p < max; p++) {
+			System.out.print(p + " ");
+		}
 		for(int i = 0; i < max; i++) {
 			System.out.print("\n"+i + " |");
 			for(int p = 0; p < max; p++) {
