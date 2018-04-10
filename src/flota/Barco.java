@@ -78,24 +78,28 @@ public class Barco {
 	public boolean comprLan(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(lanchas.getX1(), lanchas.getY1(), 2, tablero, lanchas.getDireccion());
+		if(ok) lanchas.calPosiciones();
 		return ok;
 	}
 	
 	public boolean comprDes(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(destructor.getX1(), destructor.getY1(), 3, tablero, destructor.getDireccion());
+		if(ok) destructor.calPosiciones();
 		return ok;
 	}
 	
 	public boolean comprSub(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(submarino.getX1(), submarino.getY1(), 3, tablero, submarino.getDireccion());
+		if(ok) submarino.calPosiciones(); //revisar
 		return ok;
 	}
 	
 	public boolean comprAco(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(acorazado.getX1(), acorazado.getY1(), 4, tablero, acorazado.getDireccion());
+		if(ok) acorazado.calPosiciones(); //revisar
 		return ok;
 	}
 	
@@ -109,11 +113,10 @@ public class Barco {
 		boolean ok = true;
 		switch(direc) {
 		case 1:
-			y1 = y1 - 1;
+			y1 = y1 - pos;
 			break;
 		case 2:
-			break;
-		case 3:
+			x1 = x1 - pos;
 		}
 		if(x1 >= 0 && x1 < tablero.getMax() && y1 >= 0 && y1 < tablero.getMax()) {
 			ok = comprovarPosiciones(x1, y1, pos, tablero, direc);
@@ -133,7 +136,7 @@ public class Barco {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
 		if(x1 == 0 && y1 == 0) {
-			while(pos > 1 && !ok && y1 < tablero.getMax() - 1) {
+			while(pos > 0 && ok && y1 <= tablero.getMax() - 1) {
 				if(map[x1][y1] == 'B' || map [x1 + 1][y1] == 'B') ok = false;
 				else {
 					pos--;
@@ -151,7 +154,7 @@ public class Barco {
 			}
 			else {
 				if(x1 == tablero.getMax() - 1 && y1 == 0) {
-					while(pos > 1 && !ok && y1 < tablero.getMax() - 1) {
+					while(pos > 0 && ok && y1 <= tablero.getMax() - 1) {
 						if(map[x1][y1] == 'B' || map [x1 - 1][y1] == 'B') ok = false;
 						else {
 							pos--;
@@ -169,7 +172,7 @@ public class Barco {
 					}
 					else {
 						if(x1 == 0) {
-							while(pos > 1 && !ok && y1 < tablero.getMax() - 1) {
+							while(pos > 0 && ok && y1 <= tablero.getMax() - 1) {
 								if(map[x1][y1] == 'B' || map [x1 + 1][y1] == 'B') ok = false;
 								else {
 									pos--;
@@ -182,20 +185,20 @@ public class Barco {
 						}
 						else {
 							if(x1 == tablero.getMax() - 1) {
-								while(pos > 1 && !ok && y1 < tablero.getMax() - 1) {
-									if(map[x1][y1] == 'B' || map [x1 - 1][y1] == 'B') ok = false;
+								while(pos > 0 && ok && y1 <= tablero.getMax() - 1) {
+									if(map[x1][y1] == 'B' || map [x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 									else {
 										pos--;
 										y1++;
 									}
 								}
 								if(ok && y1 <= tablero.getMax() - 1) {
-									if(map[x1][y1] == 'B' && map[x1 - 1][y1] == 'B') ok = false;
+									if(map[x1][y1] == 'B' && map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 								}
 							}
 							else {
 								if(y1 == 0) {
-									while(!ok && pos > 1 && y1 < tablero.getMax() - 1) {
+									while(ok && pos > 0 && y1 <= tablero.getMax() - 1) {
 										if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1] [y1] == 'B') ok = false;
 										else {
 											pos--;
@@ -212,7 +215,7 @@ public class Barco {
 									else {
 										if(map[x1][y1 - 1] == 'B' || map[x1 + 1][y1 - 1] == 'B' || map[x1 - 1][y1 - 1] == 'B') ok = false;
 										else {
-											while(!ok && y1 < tablero.getMax() - 1 && pos > 1) {
+											while(!ok && y1 <= tablero.getMax() - 1 && pos > 0) {
 												if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
 												else {
 													pos--;
@@ -234,39 +237,95 @@ public class Barco {
 	
 	private boolean comprovarPos23(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
-		if(x1 == 0 && y1 == 0) {
-			
+		char[][] map = tablero.getTablero();
+		if(x1 == 0 && y1 == 0) { //para abajo de 0 a 9
+			while(ok && x1 <= tablero.getMax() - 1 && pos > 0) {
+				if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+				else {
+					pos--;
+					x1++;
+				}
+				if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+			}
 		}
 		else {
 			if(x1 == 0 && y1 == tablero.getMax() - 1) {
-				
+				while(ok && x1 <= tablero.getMax() - 1 && pos > 0) {
+					if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+					else {
+						pos--;
+						x1++;
+					}
+					if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+				}
 			}
 			else {
 				if(x1 == tablero.getMax() - 1 && y1 == 0) {
-					
+					if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 + 1] == 'B') ok = false;
+					else if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
 				}
 				else {
 					if(x1 == tablero.getMax() - 1 && y1 == tablero.getMax() - 1) {
-						
+						if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 - 1] == 'B') ok = false;
+						else if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 					}
 					else {
 						if(x1 == 0) {
+							while(ok && pos > 0 && x1 <= tablero.getMax() - 1) {
+								if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+								else {
+									pos--;
+									x1++;
+								}
+							}
+							if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 							
 						}
 						else {
 							if(x1 == tablero.getMax() - 1) {
-								
+								if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 + 1] == 'B' || map[x1 - 1][y1 - 1] == 'B') ok = false;
+								else if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
 							}
 							else {
 								if(y1 == 0) {
-									
+									if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 + 1] == 'B') ok = false;
+									else {
+										while(ok && pos > 0 && x1 <= tablero.getMax() - 1) {
+											if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+											else {
+												pos--;
+												x1++;
+											}
+										}
+										if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+									}
 								}
 								else {
 									if(y1 == tablero.getMax() - 1) {
-										
+										if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 - 1] == 'B') ok = false;
+										else {
+											while(ok && pos > 0 && x1 <= tablero.getMax() - 1) {
+												if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+												else {
+													pos--;
+													x1++;
+												}
+											}
+											if(ok && x1 <= tablero.getMax()) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+										}
 									}
 									else {
-										
+										if(map[x1 - 1][y1] == 'B' || map[x1 - 1][y1 - 1] == 'B' || map[x1 - 1] [y1 + 1] == 'B') ok = false;
+										else {
+											while(ok && pos > 0 && x1 <= tablero.getMax() - 1) {
+												if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+												else {
+													pos--;
+													x1++;
+												}
+											}
+											if(ok && x1 <= tablero.getMax() - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+										}
 									}
 								}
 							}
