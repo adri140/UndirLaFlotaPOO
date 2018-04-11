@@ -106,6 +106,7 @@ public class Barco {
 	public boolean comprPor(Tab tablero) {
 		boolean ok = false;
 		ok = comprovar(portaviones.getX1(), portaviones.getY1(), 5, tablero, portaviones.getDireccion());
+		System.out.println(ok);
 		if(ok) portaviones.calPosiciones(); //revisar
 		return ok;
 	}
