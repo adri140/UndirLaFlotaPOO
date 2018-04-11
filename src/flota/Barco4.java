@@ -90,21 +90,33 @@ public class Barco4 {
 		public void calPosiciones() {
 			switch(direccion) {
 			case 0:
+				x2 = x1;
+				x3 = x2;
+				x4 = x3;
 				y2 = y1 + 1;
 				y3 = y2 + 1;
 				y4 = y3 + 1;
 				break;
 			case 1:
+				x2 = x1;
+				x3 = x2;
+				x4 = x3;
 				y2 = y1 - 1;
 				y3 = y2 - 1;
 				y4 = y3 - 1;
 				break;
 			case 2:
+				y2 = y1;
+				y3 = y2;
+				y4 = y3;
 				x2 = x1 - 1;
 				x3 = x2 - 1;
 				x4 = x3 - 1;
 				break;
 			case 3:
+				y2 = y1;
+				y3 = y2;
+				y4 = y3;
 				x2 = x1 + 1;
 				x3 = x2 + 1;
 				x4 = x3 + 1;
