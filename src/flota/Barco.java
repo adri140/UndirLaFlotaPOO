@@ -77,66 +77,58 @@ public class Barco {
 	//otros
 	public boolean comprLan(Tab tablero) {
 		boolean ok = false;
-		ok = comprovar(lanchas.getX1(), lanchas.getY1(), 2, tablero, lanchas.getDireccion());
+		ok = calPosFin(lanchas.getX1(), lanchas.getY1(), 2, tablero, lanchas.getDireccion());
 		if(ok) lanchas.calPosiciones();
 		return ok;
 	}
 	
 	public boolean comprDes(Tab tablero) {
 		boolean ok = false;
-		ok = comprovar(destructor.getX1(), destructor.getY1(), 3, tablero, destructor.getDireccion());
+		ok = calPosFin(destructor.getX1(), destructor.getY1(), 3, tablero, destructor.getDireccion());
 		if(ok) destructor.calPosiciones();
 		return ok;
 	}
 	
 	public boolean comprSub(Tab tablero) {
 		boolean ok = false;
-		ok = comprovar(submarino.getX1(), submarino.getY1(), 3, tablero, submarino.getDireccion());
+		ok = calPosFin(submarino.getX1(), submarino.getY1(), 3, tablero, submarino.getDireccion());
 		if(ok) submarino.calPosiciones(); //revisar
 		return ok;
 	}
 	
 	public boolean comprAco(Tab tablero) {
 		boolean ok = false;
-		ok = comprovar(acorazado.getX1(), acorazado.getY1(), 4, tablero, acorazado.getDireccion());
+		ok = calPosFin(acorazado.getX1(), acorazado.getY1(), 4, tablero, acorazado.getDireccion());
 		if(ok) acorazado.calPosiciones(); //revisar
 		return ok;
 	}
 	
 	public boolean comprPor(Tab tablero) {
 		boolean ok = false;
-		ok = comprovar(portaviones.getX1(), portaviones.getY1(), 5, tablero, portaviones.getDireccion());
+		ok = calPosFin(portaviones.getX1(), portaviones.getY1(), 5, tablero, portaviones.getDireccion());
 		//System.out.println(ok);
 		if(ok) portaviones.calPosiciones(); //revisar
 		return ok;
 	}
 	
-	private boolean comprovar(int x1, int y1, int pos, Tab tablero, int direc) {
+	private boolean calPosFin(int x1, int y1, int pos, Tab tablero, int direc) {
 		boolean ok = false;
-		int posx = 0;
-		int posy = 0;
 		switch(direc) {
 		case 0:
-			posx = x1;
-			posy = y1 + pos;
+			y1 = y1 + pos;
 			break;
 		case 1:
-			posx = x1;
-			posy = y1;
 			y1 = y1 - (pos - 1);
 			break;
 		case 2:
-			posx = x1;
-			posy = y1;
 			x1 = x1 - (pos - 1);
 			break;
 		case 3:
-			posx = x1 + pos;
-			posy = y1;
+			x1 = x1 + pos;
 		}
-		if((x1 >= 0 && x1 < tablero.getMax()) && (y1 >= 0 && y1 < tablero.getMax()) && (posx >= 0 && posx < tablero.getMax()) && (posy >= 0 && posy < tablero.getMax())) {
+		if((x1 >= 0 && x1 < tablero.getMax()) && (y1 >= 0 && y1 < tablero.getMax())) {
 			ok = comprovarPosiciones(x1, y1, pos, tablero, direc);
-			if(ok) escribir(tablero, x1, y1, direc, pos);
+			if(ok != false) escribir(tablero, x1, y1, direc, pos);
 		}
 		return ok;
 	}
@@ -151,13 +143,100 @@ public class Barco {
 	private boolean comprovarPos01(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
-		
+		int max = tablero.getMax(); //temporal
+		if(x1 == 0 && y1 == 0) {
+			while(pos > 0 && y1 <= max - 1 && ok != false) {
+				if(map[x1][y1] != 'B' && map[x1 + 1][y1] != 'B') {
+					pos--;
+					y1++;
+				}
+				else ok = false;
+			}
+			if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
+		}
+		else {
+			if(x1 == 0 && y1 == max - 1) {
+				if(map[x1][y1 - 1] != 'B' && map[x1 + 1][y1 - 1] != 'B') if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
+				else ok = false;
+			}
+			else {
+				if(x1 == max - 1 && y1 == 0) {
+					while(pos > 0 && y1 <= max - 1 && ok != false) {
+						if(map[x1][y1] != 'B' && map[x1 - 1][y1] != 'B') {
+							pos--;
+							y1++;
+						}
+						else ok = false;
+					}
+					if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+				}
+				else {
+					if(x1 == max - 1 && y1 == max - 1) {
+						if(map[x1][y1 - 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+						else ok = false;
+					}
+					else {
+						if(x1 == 0) {
+							if(map[x1][y1 - 1] != 'B' && map[x1 + 1][y1 - 1] != 'B') {
+								while(pos > 0 && y1 <= max - 1 && ok != false) {
+									if(map[x1][y1] != 'B' && map[x1 + 1][y1] != 'B') {
+										pos--;
+										y1++;
+									}
+									else ok = false;
+								}
+								if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
+								else ok = false;
+							}
+							else ok = false;
+						}
+						else {
+							if(x1 == max - 1) {
+								if(map[x1][y1 - 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
+									while(pos > 0 && y1 <= max - 1 && ok != false) {
+										if(map[x1][y1] != 'B' && map[x1 - 1][y1] != 'B') {
+											pos--;
+											y1++;
+										}
+										else ok = false;
+									}
+									if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+									else ok = false;
+								}
+								else ok = false;
+							}
+							else {
+								if(y1 == 0) {
+									while(ok != false && y1 <= max - 1 && pos > 0) {
+										if(map[x1][y1] != 'B' && map[x1 + 1][y1] != 'B' && map[x1 - 1][y1] != 'B') {
+											y1++;
+											pos--;
+										}
+										else ok = false;
+									}
+									if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+								}
+								else {
+									if(y1 == max - 1) {
+										
+									}
+									else {
+										
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		return ok;
 	}
 	
 	private boolean comprovarPos23(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
+		int max = tablero.getMax(); //temporal
 	
 		return ok;
 	}
