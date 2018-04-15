@@ -51,6 +51,8 @@ public class Run {
 		Barco.setY1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setDireccion(rnd.nextInt(4));
 		
+		System.out.println(Barco.getX1() + " " + Barco.getY1() + " " + Barco.getDireccion());
+		
 		/*Barco.setX1(0, tablero);
 		System.out.print("x1 " + Barco.getX1() + " ");
 		Barco.setY1(9, tablero);
@@ -63,6 +65,7 @@ public class Run {
 		Barco.setX1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setY1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setDireccion(rnd.nextInt(4));
+		System.out.println(Barco.getX1() + " " + Barco.getY1() + " " + Barco.getDireccion());
 		//System.out.print("direccion " + Barco.getDireccion() + "\n");
 	}
 	
@@ -70,6 +73,7 @@ public class Run {
 		Barco.setX1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setY1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setDireccion(rnd.nextInt(4));
+		System.out.println(Barco.getX1() + " " + Barco.getY1() + " " + Barco.getDireccion());
 		//System.out.print("direccion " + Barco.getDireccion() + "\n");
 	}
 	
@@ -77,6 +81,7 @@ public class Run {
 		Barco.setX1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setY1(rnd.nextInt(tablero.getMax()), tablero);
 		Barco.setDireccion(rnd.nextInt(4));
+		System.out.println(Barco.getX1() + " " + Barco.getY1() + " " + Barco.getDireccion());
 		//System.out.print("direccion " + Barco.getDireccion() + "\n");
 	}
 }
