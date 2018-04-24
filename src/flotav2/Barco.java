@@ -1,17 +1,17 @@
 package flotav2;
 
-import flota.Tab;
-
 public abstract class Barco {
 	private int x1;
 	private int y1;
 	private int direccion;
+	private boolean undido;
 	
 	//constructores
 	public Barco() {
 		this.x1 = -1;
 		this.y1 = -1;
 		this.direccion = -1;
+		undido = false;
 	}
 	
 	public Barco(int x1, int y1, Tab tablero) {
@@ -44,6 +44,10 @@ public abstract class Barco {
 		return false;
 	}
 	
+	private void setUndido(boolean i) {
+		undido = i;
+	}
+	
 	//getters
 	public int getX1() {
 		return x1;
@@ -55,6 +59,10 @@ public abstract class Barco {
 	
 	public int getDireccion() {
 		return direccion;
+	}
+	
+	public boolean getUndido() {
+		return undido;
 	}
 	
 	//otros
