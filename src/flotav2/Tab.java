@@ -6,6 +6,9 @@ public class Tab {
 	private Barco[] barcos;
 	private int numBarco = 0;
 	private static int maxBarco = 5;
+	private History[] historial; //almacena las tiradas de los jugadores sobre este tablero
+	private int numHistorial = 0;
+	private int maxHistorial;
 	
 	//Constructores
 	public Tab() {
@@ -13,6 +16,8 @@ public class Tab {
 		tablero = new char[max][max];
 		barcos = new Barco[maxBarco];
 		this.iniTablero('A');
+		historial = new History[(max * max)];
+		maxHistorial = (max * max);
 	}
 	
 	public Tab(int max) {
@@ -21,6 +26,8 @@ public class Tab {
 			this.max = max;
 			tablero = new char[max][max];
 			this.iniTablero('A');
+			historial = new History[(max * max)];
+			maxHistorial = (max * max);
 		}
 	}
 	
@@ -379,5 +386,10 @@ public class Tab {
 			return barcos[num];
 		}
 		else return null;
+	}
+	
+	public void insertarHistorial(History h) {
+		historial[numHistorial] = h;
+		numHistorial++;
 	}
 }
