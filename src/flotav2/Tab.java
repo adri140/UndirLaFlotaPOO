@@ -392,4 +392,134 @@ public class Tab {
 		historial[numHistorial] = h;
 		numHistorial++;
 	}
+	
+	public boolean disparar(int x, int y) {
+		boolean ok = false;
+		int p;
+		int xb, yb;
+		if(tablero[x][y] != '?') {
+			for(int i = 0; i < maxBarco; i++) {
+				if(barcos[i] instanceof Barco2 != false) {
+					p = 0;
+					xb = barcos[p].getX1();
+					yb = barcos[p].getY1();
+					while(ok != true && p < 2) {
+						ok = igualPos(xb, yb, x, y);
+						if(ok) {
+							tablero[x][y] = 'B';
+						}
+						else {
+							p++;
+							switch(p) {
+							case 1:
+								xb = ((Barco2) barcos[p]).getX2();
+								yb = ((Barco2) barcos[p]).getY2();
+								break;
+							}
+						}
+					}
+				}
+				else {
+					if(barcos[i] instanceof Barco3 != false) {
+						p = 0;
+						xb = barcos[p].getX1();
+						yb = barcos[p].getY1();
+						while(ok != true && p < 3) {
+							ok = igualPos(xb, yb, x, y);
+							if(ok) {
+								tablero[x][y] = 'B';
+							}
+							else {
+								p++;
+								switch(p) {
+								case 1:
+									xb = ((Barco3) barcos[p]).getX2();
+									yb = ((Barco3) barcos[p]).getY2();
+									break;
+								case 2:
+									xb = ((Barco3) barcos[p]).getX3();
+									yb = ((Barco3) barcos[p]).getY3();
+									break;
+								}
+							}
+						}
+					}
+					else {
+						if(barcos[i] instanceof Barco4 != false) {
+							p = 0;
+							xb = barcos[p].getX1();
+							yb = barcos[p].getY1();
+							while(ok != true && p < 4) {
+								ok = igualPos(xb, yb, x, y);
+								if(ok) {
+									tablero[x][y] = 'B';
+								}
+								else {
+									p++;
+									switch(p) {
+									case 1:
+										xb = ((Barco4) barcos[p]).getX2();
+										yb = ((Barco4) barcos[p]).getY2();
+										break;
+									case 2:
+										xb = ((Barco4) barcos[p]).getX3();
+										yb = ((Barco4) barcos[p]).getY3();
+										break;
+									case 3:
+										xb = ((Barco4) barcos[p]).getX4();
+										yb = ((Barco4) barcos[p]).getY4();
+										break;
+									}
+								}
+							}
+						}
+						else {
+							if(barcos[i] instanceof Barco5 != false) {
+								p = 0;
+								xb = barcos[p].getX1();
+								yb = barcos[p].getY1();
+								while(ok != true && p < 5) {
+									ok = igualPos(xb, yb, x, y);
+									if(ok) {
+										tablero[x][y] = 'B';
+									}
+									else {
+										p++;
+										switch(p) {
+										case 1:
+											xb = ((Barco5) barcos[p]).getX2();
+											yb = ((Barco5) barcos[p]).getY2();
+											break;
+										case 2:
+											xb = ((Barco5) barcos[p]).getX3();
+											yb = ((Barco5) barcos[p]).getY3();
+											break;
+										case 3:
+											xb = ((Barco5) barcos[p]).getX4();
+											yb = ((Barco5) barcos[p]).getY4();
+											break;
+										case 4:
+											xb = ((Barco5) barcos[p]).getX5();
+											yb = ((Barco5) barcos[p]).getY5();
+											break;
+										}
+									}
+								}
+								if(ok == false) {
+									tablero[x][y] = 'A';
+									ok = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return ok;
+	}
+	
+	private boolean igualPos(int xb, int yb, int x, int y) {
+		if(xb == x && yb == y) return true;
+		return false;
+	}
 }
