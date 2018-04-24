@@ -11,7 +11,8 @@ public class Tab {
 	public Tab() {
 		max = 10;
 		tablero = new char[max][max];
-		this.iniTablero();
+		barcos = new Barco[maxBarco];
+		this.iniTablero('A');
 	}
 	
 	public Tab(int max) {
@@ -19,7 +20,7 @@ public class Tab {
 		if(compMax(max)) { 
 			this.max = max;
 			tablero = new char[max][max];
-			this.iniTablero();
+			this.iniTablero('A');
 		}
 	}
 	
@@ -41,18 +42,20 @@ public class Tab {
 	//Otros
 	public boolean insertarBarco(Barco b) {
 		if(numBarco < maxBarco) {
-			if(b instanceof Barco2 != false) barcos[numBarco] = new Barco2(b);
+			if(b instanceof Barco2 != false) barcos[numBarco] = new Barco2( b, this);
 			else {
-				if(b instanceof Barco3 != false) barcos[numBarco] = new Barco3(b);
+				if(b instanceof Barco3 != false) barcos[numBarco] = new Barco3( b, this);
 				else {
-					if(b instanceof Barco4 != false) barcos[numBarco] = new Barco4(b);
-					else barcos[numBarco] = new Barco5(b);
+					if(b instanceof Barco4 != false) barcos[numBarco] = new Barco4( b, this);
+					else {
+						if(b instanceof Barco5 != false) barcos[numBarco] = new Barco5( b, this);
+					}
 				}
 			}
 			numBarco++;
-			return true;
+			return true;//añadido
 		}
-		return false;
+		return false; //no añadido
 	}
 	
 	private boolean compMax(int value) {
@@ -73,10 +76,10 @@ public class Tab {
 		}
 	}
 	
-	private void iniTablero() {
+	private void iniTablero(char car) {
 		for(int i = 0; i < max; i++) {
 			for(int p = 0; p < max; p++) {
-				tablero[i][p] = 'A';
+				tablero[i][p] = car; // ?
 			}
 		}
 	}
