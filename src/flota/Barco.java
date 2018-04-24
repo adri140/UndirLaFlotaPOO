@@ -1,5 +1,7 @@
 package flota;
 
+import flotav2.Tab;
+
 public class Barco {
 	private int numPlayer;
 	private Barco2 lanchas = new Barco2();
@@ -117,7 +119,7 @@ public class Barco {
 		int y = y1;
 		switch(direc) { //calcula la posicio final hon terminara el baixell, per la seva comprovació
 		case 0:
-			y = y + pos;
+			y = y + (pos - 1);
 			break;
 		case 1:
 			y = y - (pos - 1);
@@ -126,7 +128,7 @@ public class Barco {
 			x = x - (pos - 1);
 			break;
 		case 3:
-			x = x + pos;
+			x = x + (pos - 1);
 		}
 		if((x >= 0 && x < tablero.getMax()) && (y >= 0 && y < tablero.getMax())) {
 			switch(direc) { //calcula la posició inicial, on començara les comprovacions i on començara a escribir
@@ -162,11 +164,11 @@ public class Barco {
 				}
 				else ok = false;
 			}
-			if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
+			if(ok != false && y1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;}
 		}
 		else {
 			if(x1 == 0 && y1 == max - 1) {
-				if(map[x1][y1 - 1] != 'B' && map[x1 + 1][y1 - 1] != 'B') if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
+				if(map[x1][y1 - 1] != 'B' && map[x1 + 1][y1 - 1] != 'B') { if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;}
 				else ok = false;
 			}
 			else {
@@ -178,11 +180,11 @@ public class Barco {
 						}
 						else ok = false;
 					}
-					if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+					if(ok != false && y1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;}
 				}
 				else {
 					if(x1 == max - 1 && y1 == max - 1) {
-						if(map[x1][y1 - 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+						if(map[x1][y1 - 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') { if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;}
 						else ok = false;
 					}
 					else {
@@ -195,8 +197,7 @@ public class Barco {
 									}
 									else ok = false;
 								}
-								if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;
-								else ok = false;
+								if(ok != false && y1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B') ok = false;}
 							}
 							else ok = false;
 						}
@@ -210,8 +211,7 @@ public class Barco {
 										}
 										else ok = false;
 									}
-									if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
-									else ok = false;
+									if(ok != false && y1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;}
 								}
 								else ok = false;
 							}
@@ -224,7 +224,7 @@ public class Barco {
 										}
 										else ok = false;
 									}
-									if(ok != false && y1 <= max - 1) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+									if(ok != false && y1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;}
 								}
 								else {
 									if(y1 == max - 1) {
@@ -240,7 +240,7 @@ public class Barco {
 												}
 												else ok = false;
 											}
-											if(y1 <= max - 1 && ok != false) if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;
+											if(y1 <= max - 1 && ok != false) { if(map[x1][y1] == 'B' || map[x1 + 1][y1] == 'B' || map[x1 - 1][y1] == 'B') ok = false;}
 										}
 										else ok = false;
 									}
@@ -266,7 +266,7 @@ public class Barco {
 				}
 				else ok = false;
 			}
-			if(ok != false && x1 <= max - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+			if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;}
 		}
 		else {
 			if(x1 == 0 && y1 == max - 1) {
@@ -277,16 +277,16 @@ public class Barco {
 					}
 					else ok = false;
 				}
-				if(ok != false && x1 <= max - 1) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+				if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 			}
 			else {
 				if(x1 == max - 1 && y1 == 0) {
-					if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 + 1] != 'B') if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+					if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 + 1] != 'B') { if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;}
 					else ok = false;
 				}
 				else {
 					if(x1 == max - 1 && y1 == max - 1) {
-						if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B') if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+						if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B') { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 						else ok = false;
 					}
 					else {
@@ -298,11 +298,11 @@ public class Barco {
 								}
 								else ok = false;
 							}
-							if(ok != false && x1 <= max - 1) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+							if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;}
 						}
 						else {
 							if(x1 == max - 1) {
-								if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B' && map[x1 - 1][y1 + 1] != 'B') if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;
+								if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B' && map[x1 - 1][y1 + 1] != 'B') { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B' || map[x1][y1 + 1] == 'B') ok = false;}
 								else ok = false;
 							}
 							else {
@@ -325,7 +325,7 @@ public class Barco {
 											}
 											else ok = false;
 										}
-										if(ok != false && x1 <= max - 1) if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+										if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 									}
 									else {
 										if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 + 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
@@ -336,7 +336,7 @@ public class Barco {
 												}
 												else ok = false;
 											}
-											if(ok != false && x1 <= max - 1) if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;
+											if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 + 1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 										}
 										else ok = false;
 									}
