@@ -11,6 +11,9 @@ public class Run {
 		// TODO Auto-generated method stub
 		Tab tablero = new Tab();
 		tablero = genTab();
+		tablero.reiniTab();
+		System.out.println("");
+		tablero.viewTab();
 		
 	}
 	

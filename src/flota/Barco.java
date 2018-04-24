@@ -1,7 +1,5 @@
 package flota;
 
-import flotav2.Tab;
-
 public class Barco {
 	private int numPlayer;
 	private Barco2 lanchas = new Barco2();
@@ -77,9 +75,9 @@ public class Barco {
 	}
 	
 	//otros
-	public boolean comprLan(Tab tablero) {
+	public boolean comprLan(Tab tabMaquina) {
 		boolean ok = false;
-		ok = calPosFin(lanchas.getX1(), lanchas.getY1(), 2, tablero, lanchas.getDireccion());
+		ok = calPosFin(lanchas.getX1(), lanchas.getY1(), 2, tabMaquina, lanchas.getDireccion());
 		if(ok) lanchas.calPosiciones();
 		return ok;
 	}
