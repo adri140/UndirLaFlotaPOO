@@ -14,7 +14,25 @@ public class Run {
 		tablero.reiniTab();
 		System.out.println("");
 		tablero.viewTab();
-		
+		System.out.println("");
+		boolean ok = false;
+		boolean tmp = false;
+		while(ok != true) {
+			int x = reader.nextInt();
+			int y = reader.nextInt();
+			tmp = false;
+			while(tmp == false) {
+				tmp = tablero.gestDispar(x, y, Player.PLAYER);
+				if(tmp == false) {
+					System.out.println("Tria un altre casella");
+				}
+			}
+			System.out.println("");
+			tablero.viewTab();
+			System.out.println("");
+			if(tablero.getPos(x, y) == 'B') ok = true;
+		}
+		tablero.viewHistory();
 	}
 	
 	private static Tab genTab() {
