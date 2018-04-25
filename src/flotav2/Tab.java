@@ -2,13 +2,14 @@ package flotav2;
 
 public class Tab {
 	private char[][] tablero;
-	private int max;
 	private Barco[] barcos;
 	private int numBarco = 0;
-	private static int maxBarco = 5;
 	private History[] historial; //almacena las tiradas de los jugadores sobre este tablero
 	private int numHistorial = 0;
-	private int maxHistorial;
+	
+	private static int maxHistorial; //indica el numero maximo de historiales almacenados en este tablero
+	private static int maxBarco = 5; //indica el numero maximo de varcos por tablero
+	private static int max; //indica el maximo tamanyo del tablero quadrado
 	
 	//Constructores
 	public Tab() {
@@ -23,9 +24,9 @@ public class Tab {
 	public Tab(int max) {
 		this();
 		if(compMax(max)) { 
-			this.max = max;
 			tablero = new char[max][max];
 			this.iniTablero('A');
+			Tab.setMax(max);
 			historial = new History[(max * max)];
 			maxHistorial = (max * max);
 		}
@@ -36,13 +37,17 @@ public class Tab {
 		if(num >= 0 && num < maxBarco) numBarco = num;
 	}
 	
+	public static void setMax(int max) {
+		Tab.max = max;
+	}
+	
 	//getters
 	public char[][] getTablero(){
 		return tablero;
 	}
 	
-	public int getMax() {
-		return max;
+	public static int getMax() {
+		return Tab.max;
 	}
 	
 	public int getMaxBarco() {
@@ -165,7 +170,7 @@ public class Tab {
 		case 3:
 			x = x + (pos - 1);
 		}
-		if((x >= 0 && x < tablero.getMax()) && (y >= 0 && y < tablero.getMax())) {
+		if((x >= 0 && x < Tab.getMax()) && (y >= 0 && y < Tab.getMax())) {
 			switch(direc) { //calcula la posició inicial, on començara les comprovacions i on començara a escribir
 			case 1:
 				y1 = y1 - (pos - 1);
@@ -190,7 +195,7 @@ public class Tab {
 	private boolean comprovarPos01(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
-		int max = tablero.getMax(); //temporal
+		int max = Tab.getMax(); //temporal
 		if(x1 == 0 && y1 == 0) {
 			while(pos > 0 && y1 <= max - 1 && ok != false) {
 				if(map[x1][y1] != 'B' && map[x1 + 1][y1] != 'B') {
@@ -292,7 +297,7 @@ public class Tab {
 	private boolean comprovarPos23(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
-		int max = tablero.getMax(); //temporal
+		int max = Tab.getMax(); //temporal
 		if(x1 == 0 && y1 == 0) {
 			while(ok != false && pos > 0 && x1 <= max - 1) {
 				if(map[x1][y1] != 'B' && map[x1][y1 + 1] != 'B') {
