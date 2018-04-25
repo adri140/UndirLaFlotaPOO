@@ -85,4 +85,6 @@ public abstract class Barco {
 	public abstract void calPos();
 	
 	public abstract void clonar(Barco b, Tab tablero);
+	
+	public abstract void visualizar();
 }

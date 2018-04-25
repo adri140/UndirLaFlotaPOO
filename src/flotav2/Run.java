@@ -18,20 +18,31 @@ public class Run {
 		boolean ok = false;
 		boolean tmp = false;
 		while(ok != true) {
-			int x = reader.nextInt();
-			int y = reader.nextInt();
 			tmp = false;
+			int x = 0;
+			int y = 0;
+			int aux = 0;
 			while(tmp == false) {
+				System.out.print("x: ");
+				x = reader.nextInt();
+				System.out.print("y: ");
+				y = reader.nextInt();
 				tmp = tablero.gestDispar(x, y, Player.PLAYER);
 				if(tmp == false) {
 					System.out.println("Tria un altre casella");
+					reader.nextLine();
 				}
 			}
 			System.out.println("");
 			tablero.viewTab();
 			System.out.println("");
-			if(tablero.getPos(x, y) == 'B') ok = true;
+			System.out.print("1 = continuar, 2 = salir ");
+			aux = reader.nextInt();
+			if(aux == 1) ok = false;
+			else ok = true;
 		}
+		tablero.viewBarcos();
+		System.out.println("");
 		tablero.viewHistory();
 	}
 	
@@ -42,7 +53,7 @@ public class Run {
 		boolean ok = false;
 		
 		int i = 0;
-		while(i < 5) {
+		while(i < TMP.getMaxBarco()) {
 			ok = false;
 			switch(i) {
 			case 0: //barco2
@@ -106,9 +117,7 @@ public class Run {
 			}
 			else TMP.setNumBarco(TMP.getNumBarco() - 1);
 		}
-		
 		return TMP;
-		
 	}
 
 }

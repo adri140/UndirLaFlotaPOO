@@ -110,6 +110,7 @@ public class Tab {
 				System.out.print(tablero[i][p] + "|");
 			}
 		}
+		System.out.println("");
 	}
 	
 	private void iniTablero(char car) {
@@ -120,18 +121,25 @@ public class Tab {
 		}
 	}
 	
+	/**
+	 * Inici la comprovacion de si el barco puede posicionarse o no en esas posiciones
+	 * @param num
+	 * @return
+	 */
 	public boolean comprovar(int num) {
 		boolean ok = false;
-		if(num >= 0 && num < maxBarco) {
-			ok = calPosFin(barcos[num].getX1(), barcos[num].getY1(), barcos[num].getPosiciones(), this, barcos[num].getDireccion());
-			if(ok == true) {
-				if(barcos[num] instanceof Barco2 != false) ((Barco2) barcos[num]).calPos();
-				else {
-					if(barcos[num] instanceof Barco3 != false) ((Barco3) barcos[num]).calPos();
+		if(barcos[num].getX1() != -1 && barcos[num].getY1() != -1 && barcos[num].getDireccion() != -1) {
+			if(num >= 0 && num < maxBarco) {
+				ok = calPosFin(barcos[num].getX1(), barcos[num].getY1(), barcos[num].getPosiciones(), this, barcos[num].getDireccion());
+				if(ok == true) {
+					if(barcos[num] instanceof Barco2 != false) ((Barco2) barcos[num]).calPos();
 					else {
-						if(barcos[num] instanceof Barco4 != false) ((Barco4) barcos[num]).calPos();
+						if(barcos[num] instanceof Barco3 != false) ((Barco3) barcos[num]).calPos();
 						else {
-							if(barcos[num] instanceof Barco5 != false) ((Barco5) barcos[num]).calPos();
+							if(barcos[num] instanceof Barco4 != false) ((Barco4) barcos[num]).calPos();
+							else {
+								if(barcos[num] instanceof Barco5 != false) ((Barco5) barcos[num]).calPos();
+							}
 						}
 					}
 				}
@@ -345,14 +353,17 @@ public class Tab {
 								}
 								else {
 									if(y1 == max - 1) {
-										while(ok != false && pos > 0 && x1 <= max - 1) {
-											if(map[x1][y1] != 'B' && map[x1][y1 - 1] != 'B') {
-												x1++;
-												pos--;
+										if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
+											while(ok != false && pos > 0 && x1 <= max - 1) {
+												if(map[x1][y1] != 'B' && map[x1][y1 - 1] != 'B') {
+													x1++;
+													pos--;
+												}
+												else ok = false;
 											}
-											else ok = false;
+											if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 										}
-										if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
+										else ok = false;
 									}
 									else {
 										if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 + 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
@@ -397,7 +408,9 @@ public class Tab {
 			}
 		}
 	}
-	
+	/**
+	 * Rescriu el taulell, amb el caracter ?
+	 */
 	public void reiniTab() {
 		this.iniTablero('?');
 	}
@@ -433,18 +446,160 @@ public class Tab {
 	public boolean gestDispar(int x, int y, Player player) {
 		boolean ok = false;
 		boolean b = false;
-		ok = disparar(x, y);
-		if(ok == true) {
-			if(numHistorial < maxHistorial) {
-				if(tablero[x][y] == 'B') {
-					b = true;
-					//compBarco(x, y); //comprueba si el barco esta undido
+		if((x >= 0 && x < max) && (y >= 0 && y < max)) {
+			ok = disparar(x, y);
+			if(ok == true) {
+				if(numHistorial < maxHistorial) {
+					if(tablero[x][y] == 'B') b = true;
+					historial[numHistorial] = new History(player, x, y, b, this);
+					numHistorial++;
 				}
-				historial[numHistorial] = new History(player, x, y, b, this);
-				numHistorial++;
 			}
 		}
 		return ok; //si devuelve un true es que se ha disparado a la posicion, si devuelve un false es que en la posicion se ha disparado antes
+	}
+	
+	/**
+	 * Comprueba si el barco esta undido 
+	 * @param pos
+	 */
+	private void compBarco(int pos) {
+		boolean ok = false;
+		if(barcos[pos] instanceof Barco2 != false) {
+			ok = this.barco2Ok((Barco2) barcos[pos]);
+		}
+		else {
+			if(barcos[pos] instanceof Barco3 != false) {
+				ok = this.barco3Ok((Barco3) barcos[pos]);
+			}
+			else {
+				if(barcos[pos] instanceof Barco4 != false) {
+					ok = this.barco4Ok((Barco4) barcos[pos]);
+				}
+				else {
+					if(barcos[pos] instanceof Barco5 != false) {
+						ok = this.barco5Ok((Barco5) barcos[pos]);
+					}
+				}
+			}
+		}
+		if(ok) System.out.println("Barco undido :)");
+	}
+	
+	private boolean barco2Ok(Barco2 barco) {
+		int xb, yb;
+		boolean ok = true;
+		int p = 0;
+		xb = barco.getX1();
+		yb = barco.getY1();
+		
+		while(ok != false && p < 2) {
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = barco.getX2();
+					yb = barco.getY2();
+					break;
+				}
+			}
+		}
+		if(ok == true) barco.setUndido(true);
+		return ok;
+	}
+	
+	private boolean barco3Ok(Barco3 barco) {
+		int xb, yb;
+		boolean ok = true;
+		int p = 0;
+		xb = barco.getX1();
+		yb = barco.getY1();
+		
+		while(ok != false && p < 3) {
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = barco.getX2();
+					yb = barco.getY2();
+					break;
+				case 2:
+					xb = barco.getX3();
+					yb = barco.getY3();
+					break;
+				}
+			}
+		}
+		if(ok == true) barco.setUndido(true);
+		return ok;
+	}
+	
+	private boolean barco4Ok(Barco4 barco) {
+		int xb, yb;
+		boolean ok = true;
+		int p = 0;
+		xb = barco.getX1();
+		yb = barco.getY1();
+		
+		while(ok != false && p < 4) {
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = barco.getX2();
+					yb = barco.getY2();
+					break;
+				case 2:
+					xb = barco.getX3();
+					yb = barco.getY3();
+					break;
+				case 3:
+					xb = barco.getX4();
+					yb = barco.getY4();
+					break;
+				}
+			}
+		}
+		if(ok == true) barco.setUndido(true);
+		return ok;
+	}
+	
+	private boolean barco5Ok(Barco5 barco) {
+		int xb, yb;
+		boolean ok = true;
+		int p = 0;
+		xb = barco.getX1();
+		yb = barco.getY1();
+		
+		while(ok != false && p < 5) {
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = barco.getX2();
+					yb = barco.getY2();
+					break;
+				case 2:
+					xb = barco.getX3();
+					yb = barco.getY3();
+					break;
+				case 3:
+					xb = barco.getX4();
+					yb = barco.getY4();
+					break;
+				case 4:
+					xb = barco.getX5();
+					yb = barco.getY5();
+					break;
+				}
+			}
+		}
+		if(ok == true) barco.setUndido(true);
+		return ok;
 	}
 	
 	/**
@@ -455,116 +610,23 @@ public class Tab {
 	 */
 	private boolean disparar(int x, int y) {
 		boolean ok = false;
-		int p;
-		int xb, yb;
 		if(tablero[x][y] == '?') {
-			for(int i = 0; i < maxBarco; i++) {
+			int i = 0;
+			for(i = 0; i < maxBarco && ok != true; i++) {
 				if(barcos[i] instanceof Barco2 != false) {
-					p = 0;
-					xb = barcos[p].getX1();
-					yb = barcos[p].getY1();
-					while(ok != true && p < 2) {
-						ok = igualPos(xb, yb, x, y);
-						if(ok) {
-							tablero[x][y] = 'B';
-						}
-						else {
-							p++;
-							switch(p) {
-							case 1:
-								xb = ((Barco2) barcos[i]).getX2();
-								yb = ((Barco2) barcos[i]).getY2();
-								break;
-							}
-						}
-					}
+					ok = this.comBarco2(i, x, y);
 				}
 				else {
 					if(barcos[i] instanceof Barco3 != false) {
-						p = 0;
-						xb = barcos[i].getX1();
-						yb = barcos[i].getY1();
-						while(ok != true && p < 3) {
-							ok = igualPos(xb, yb, x, y);
-							if(ok) {
-								tablero[x][y] = 'B';
-							}
-							else {
-								p++;
-								switch(p) {
-								case 1:
-									xb = ((Barco3) barcos[i]).getX2();
-									yb = ((Barco3) barcos[i]).getY2();
-									break;
-								case 2:
-									xb = ((Barco3) barcos[i]).getX3();
-									yb = ((Barco3) barcos[i]).getY3();
-									break;
-								}
-							}
-						}
+						ok = this.comBarco3(i, x, y);
 					}
 					else {
 						if(barcos[i] instanceof Barco4 != false) {
-							p = 0;
-							xb = barcos[i].getX1();
-							yb = barcos[i].getY1();
-							while(ok != true && p < 4) {
-								ok = igualPos(xb, yb, x, y);
-								if(ok) {
-									tablero[x][y] = 'B';
-								}
-								else {
-									p++;
-									switch(p) {
-									case 1:
-										xb = ((Barco4) barcos[i]).getX2();
-										yb = ((Barco4) barcos[i]).getY2();
-										break;
-									case 2:
-										xb = ((Barco4) barcos[i]).getX3();
-										yb = ((Barco4) barcos[i]).getY3();
-										break;
-									case 3:
-										xb = ((Barco4) barcos[i]).getX4();
-										yb = ((Barco4) barcos[i]).getY4();
-										break;
-									}
-								}
-							}
+							ok = this.comBarco4(i, x, y);
 						}
 						else {
 							if(barcos[i] instanceof Barco5 != false) {
-								p = 0;
-								xb = barcos[i].getX1();
-								yb = barcos[i].getY1();
-								while(ok != true && p < 5) {
-									ok = igualPos(xb, yb, x, y);
-									if(ok) {
-										tablero[x][y] = 'B';
-									}
-									else {
-										p++;
-										switch(p) {
-										case 1:
-											xb = ((Barco5) barcos[i]).getX2();
-											yb = ((Barco5) barcos[i]).getY2();
-											break;
-										case 2:
-											xb = ((Barco5) barcos[i]).getX3();
-											yb = ((Barco5) barcos[i]).getY3();
-											break;
-										case 3:
-											xb = ((Barco5) barcos[i]).getX4();
-											yb = ((Barco5) barcos[i]).getY4();
-											break;
-										case 4:
-											xb = ((Barco5) barcos[i]).getX5();
-											yb = ((Barco5) barcos[i]).getY5();
-											break;
-										}
-									}
-								}
+								ok = this.comBarco5(i, x, y);
 							}
 						}
 					}
@@ -573,6 +635,133 @@ public class Tab {
 			if(ok == false) {
 				tablero[x][y] = 'A';
 				ok = true;
+			}
+			else {
+				i--;
+				this.compBarco(i);
+			}
+		}
+		return ok;
+	}
+	
+	/**
+	 * Comprueba si la posicion en la que se ha disparado se encuentra algun barco2
+	 * @param pos
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private boolean comBarco2(int pos, int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = barcos[pos].getX1();
+		int yb = barcos[pos].getY1();
+		while(ok != true && p < 2) {
+			ok = igualPos(xb, yb, x, y);
+			if(ok) {
+				tablero[x][y] = 'B';
+			}
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = ((Barco2) barcos[pos]).getX2();
+					yb = ((Barco2) barcos[pos]).getY2();
+					break;
+				}
+			}
+		}
+		return ok;
+	}
+	
+	private boolean comBarco3(int pos, int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = barcos[pos].getX1();
+		int yb = barcos[pos].getY1();
+		while(ok != true && p < 3) {
+			ok = igualPos(xb, yb, x, y);
+			if(ok) {
+				tablero[x][y] = 'B';
+			}
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = ((Barco3) barcos[pos]).getX2();
+					yb = ((Barco3) barcos[pos]).getY2();
+					break;
+				case 2:
+					xb = ((Barco3) barcos[pos]).getX3();
+					yb = ((Barco3) barcos[pos]).getY3();
+					break;
+				}
+			}
+		}
+		return ok;
+	}
+	
+	private boolean comBarco4(int pos, int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = barcos[pos].getX1();
+		int yb = barcos[pos].getY1();
+		while(ok != true && p < 4) {
+			ok = igualPos(xb, yb, x, y);
+			if(ok) {
+				tablero[x][y] = 'B';
+			}
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = ((Barco4) barcos[pos]).getX2();
+					yb = ((Barco4) barcos[pos]).getY2();
+					break;
+				case 2:
+					xb = ((Barco4) barcos[pos]).getX3();
+					yb = ((Barco4) barcos[pos]).getY3();
+					break;
+				case 3:
+					xb = ((Barco4) barcos[pos]).getX4();
+					yb = ((Barco4) barcos[pos]).getY4();
+					break;
+				}
+			}
+		}
+		return ok;
+	}
+	
+	private boolean comBarco5(int pos, int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = barcos[pos].getX1();
+		int yb = barcos[pos].getY1();
+		while(ok != true && p < 5) {
+			ok = igualPos(xb, yb, x, y);
+			if(ok) {
+				tablero[x][y] = 'B';
+			}
+			else {
+				p++;
+				switch(p) {
+				case 1:
+					xb = ((Barco5) barcos[pos]).getX2();
+					yb = ((Barco5) barcos[pos]).getY2();
+					break;
+				case 2:
+					xb = ((Barco5) barcos[pos]).getX3();
+					yb = ((Barco5) barcos[pos]).getY3();
+					break;
+				case 3:
+					xb = ((Barco5) barcos[pos]).getX4();
+					yb = ((Barco5) barcos[pos]).getY4();
+					break;
+				case 4:
+					xb = ((Barco5) barcos[pos]).getX5();
+					yb = ((Barco5) barcos[pos]).getY5();
+					break;
+				}
 			}
 		}
 		return ok;
@@ -583,9 +772,18 @@ public class Tab {
 		return false;
 	}
 	
+	/**
+	 * Muestra el hostorial de disparos realizados sobre este tablero
+	 */
 	public void viewHistory() {
-		for(int i = 0; i < numHistorial; i++) {
+		for(int i = numHistorial - 1; i >= 0; i--) {
 			historial[i].visualizar();
+		}
+	}
+	
+	public void viewBarcos() {
+		for(int p = 0; p < maxBarco; p++){
+			barcos[p].visualizar();
 		}
 	}
 }

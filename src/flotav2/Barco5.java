@@ -128,6 +128,7 @@ public class Barco5 extends Barco {
 		}
 	}
 	
+	@Override
 	public void visualizar() {
 		System.out.println(this.toString());
 	}

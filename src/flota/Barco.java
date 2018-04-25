@@ -316,14 +316,17 @@ public class Barco {
 								}
 								else {
 									if(y1 == max - 1) {
-										while(ok != false && pos > 0 && x1 <= max - 1) {
-											if(map[x1][y1] != 'B' && map[x1][y1 - 1] != 'B') {
-												x1++;
-												pos--;
+										if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
+											while(ok != false && pos > 0 && x1 <= max - 1) {
+												if(map[x1][y1] != 'B' && map[x1][y1 - 1] != 'B') {
+													x1++;
+													pos--;
+												}
+												else ok = false;
 											}
-											else ok = false;
+											if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
 										}
-										if(ok != false && x1 <= max - 1) { if(map[x1][y1] == 'B' || map[x1][y1 - 1] == 'B') ok = false;}
+										else ok = false;
 									}
 									else {
 										if(map[x1 - 1][y1] != 'B' && map[x1 - 1][y1 + 1] != 'B' && map[x1 - 1][y1 - 1] != 'B') {
