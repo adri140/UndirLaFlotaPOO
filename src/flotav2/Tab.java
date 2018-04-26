@@ -796,6 +796,10 @@ public class Tab {
 		}
 	}
 	
+	/**
+	 * Genera i implementa els vaixells a l'array de vaixells un cop aquests siguin coorectes
+	 * @param pla
+	 */
 	public void genTab(Player pla) {
 		Random rnd = new Random();
 		int x1, y1, dir;
