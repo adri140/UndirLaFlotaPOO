@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Tab {
+	private Player propietaryTab;
 	private char[][] tablero;
 	private Barco[] barcos;
 	private int numBarco = 0;
@@ -23,9 +24,10 @@ public class Tab {
 		this.iniTablero('A');
 		historial = new History[(max * max)];
 		maxHistorial = (max * max);
+		propietaryTab = Player.MAQUINA;
 	}
 	
-	public Tab(int max) {
+	public Tab(int max, Player propietario) {
 		this();
 		if(compMax(max)) { 
 			tablero = new char[max][max];
@@ -34,6 +36,12 @@ public class Tab {
 			historial = new History[(max * max)];
 			maxHistorial = (max * max);
 		}
+		propietaryTab = propietario;
+	}
+	
+	public Tab(Player propietario) {
+		this();
+		propietaryTab = propietario;
 	}
 	
 	//Setters
@@ -48,6 +56,10 @@ public class Tab {
 	//getters
 	public char[][] getTablero(){
 		return tablero;
+	}
+	
+	public Player getPropietaryTab() {
+		return propietaryTab;
 	}
 	
 	public static int getMax() {
@@ -786,6 +798,7 @@ public class Tab {
 	 */
 	public void viewHistory() {
 		for(int i = numHistorial - 1; i >= 0; i--) {
+			System.out.print("Tirades realitzades sobre el taulell del propietari " + this.getPropietaryTab() + " ");
 			historial[i].visualizar();
 		}
 	}

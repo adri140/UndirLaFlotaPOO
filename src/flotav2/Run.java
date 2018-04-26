@@ -9,7 +9,7 @@ public class Run {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Tab tablero = new Tab();
-		tablero = genTab();
+		tablero = genTab(Player.MAQUINA);
 		tablero.reiniTab();
 		System.out.println("");
 		tablero.viewTab();
@@ -42,8 +42,8 @@ public class Run {
 		tablero.viewHistory();
 	}
 	
-	private static Tab genTab() {
-		Tab TMP = new Tab();
+	private static Tab genTab(Player propietario) {
+		Tab TMP = new Tab(propietario);
 		TMP.genTab(Player.MAQUINA);
 		return TMP;
 	}
