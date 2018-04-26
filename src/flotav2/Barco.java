@@ -78,7 +78,7 @@ public abstract class Barco {
 	}
 	//otros
 	private boolean compP(int x, Tab tabl) {
-		if(x >= 0 && x < tabl.getMax()) return true;
+		if(x >= 0 && x < Tab.getMax()) return true;
 		return false;
 	}
 	

@@ -1,5 +1,8 @@
 package flotav2;
 
+import java.util.Scanner;
+import java.util.Random;
+
 public class Tab {
 	private char[][] tablero;
 	private Barco[] barcos;
@@ -10,6 +13,7 @@ public class Tab {
 	private static int maxHistorial; //indica el numero maximo de historiales almacenados en este tablero
 	private static int maxBarco = 5; //indica el numero maximo de varcos por tablero
 	private static int max; //indica el maximo tamanyo del tablero quadrado
+	final static Scanner reader = new Scanner(System.in);
 	
 	//Constructores
 	public Tab() {
@@ -50,7 +54,7 @@ public class Tab {
 		return Tab.max;
 	}
 	
-	public int getMaxBarco() {
+	public static int getMaxBarco() {
 		return maxBarco;
 	}
 	
@@ -790,5 +794,102 @@ public class Tab {
 		for(int p = 0; p < maxBarco; p++){
 			barcos[p].visualizar();
 		}
+	}
+	
+	public void genTab(Player pla) {
+		Random rnd = new Random();
+		int x1, y1, dir;
+		boolean ok = false;
+		if(pla == Player.PLAYER) {
+			this.viewTab();
+			System.out.println("Introdueix les posicions pel vaixell de 2 posicions: ");
+		}
+		int i = 0;
+		while(i < Tab.getMaxBarco()) {
+			ok = false;
+			if(pla == Player.MAQUINA) {
+				x1 = rnd.nextInt(Tab.getMax());
+				y1 = rnd.nextInt(Tab.getMax());
+				dir = rnd.nextInt(4);
+			}
+			else {
+				x1 = Tab.inpPos("Introdueix la posició x: ");
+				y1 = Tab.inpPos("Introdueix la posició y: ");
+				dir = Tab.inpDir("Introdueix la direcció del vaixell \n0 - Cap a la dreta.\n1 - Cap a la esquerra.\n2 - Cap a adalt.\n3 - Cap a abaix.\nOpció: ");
+			}
+			switch(i) {
+			case 0: //barco2
+				this.insertarBarco(new Barco2(x1, y1, dir, this));
+				ok = this.comprovar(i);
+				if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
+				break;
+			case 1: //barco3
+			case 2:
+				this.insertarBarco(new Barco3(x1, y1, dir, this));
+				ok = this.comprovar(i);
+				if(pla == Player.PLAYER && i == 1) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
+				else {
+					if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 4 posicions: ");
+				}
+				break;
+			case 3: //barco4
+				this.insertarBarco(new Barco4(x1, y1, dir, this));
+				ok = this.comprovar(i);
+				if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 5 posicions: ");
+				break;
+			case 4: //barco5
+				this.insertarBarco(new Barco5(x1, y1, dir, this));
+				ok = this.comprovar(i);
+				break;
+			}
+			if(ok == true && pla == Player.PLAYER) {
+				i++;
+				this.viewTab();
+				System.out.println("");
+			}
+			else {
+				if(ok == true) i++;
+				else this.setNumBarco(this.getNumBarco() - 1);
+			}
+		}
+	}
+	
+	public static int inpPos(String out) {
+		boolean ok = false;
+		int pos = -1;
+		do {
+			pos = inpInt(out);
+			if(pos >= 0 && pos < Tab.getMax()) ok = true;
+			else System.out.println("Aquesta fila o columna no existeix");
+		}while(ok != true);
+		return pos;
+	}
+	
+	public static int inpInt(String out) {
+		boolean ok = false;
+		int inp = 0;
+		while(ok != true) {
+			System.out.print(out);
+			try {
+				inp = reader.nextInt();
+				ok = true;
+			}
+			catch(Exception e) {
+				System.out.println("Nomes és permeten numeros enters.");
+				reader.nextLine();
+			}
+		}
+		return inp;
+	}
+	
+	public static int inpDir(String out) {
+		boolean ok = false;
+		int dir = -1;
+		do {
+			dir = inpInt(out);
+			if(dir >= 0 && dir < 4) ok = true;
+			else System.out.println("Aquesta opció no existeix.");
+		}while(ok != true);
+		return dir;
 	}
 }
