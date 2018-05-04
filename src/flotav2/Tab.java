@@ -10,6 +10,7 @@ public class Tab {
 	private int numBarco = 0;
 	private History[] historial; //almacena las tiradas de los jugadores sobre este tablero
 	private int numHistorial = 0;
+	private IAPlayer IA;
 	
 	private static int maxHistorial; //indica el numero maximo de historiales almacenados en este tablero
 	private static int maxBarco = 5; //indica el numero maximo de varcos por tablero
@@ -25,6 +26,7 @@ public class Tab {
 		historial = new History[(max * max)];
 		maxHistorial = (max * max);
 		propietaryTab = Player.MAQUINA;
+		this.IA = new IAPlayer();
 	}
 	
 	public Tab(int max, Player propietario) {
@@ -37,11 +39,19 @@ public class Tab {
 			maxHistorial = (max * max);
 		}
 		propietaryTab = propietario;
+		if(propietaryTab == Player.MAQUINA) {
+			this.IA = new IAPlayer();
+		}
+		else this.IA = null;
 	}
 	
 	public Tab(Player propietario) {
 		this();
 		propietaryTab = propietario;
+		if(propietaryTab == Player.MAQUINA) {
+			this.IA = new IAPlayer();
+		}
+		else this.IA = null;
 	}
 	
 	//Setters
@@ -51,6 +61,10 @@ public class Tab {
 	
 	public static void setMax(int max) {
 		Tab.max = max;
+	}
+	
+	public void setIA(IAPlayer inp) {
+		this.IA = inp;
 	}
 	
 	//getters
@@ -76,6 +90,10 @@ public class Tab {
 	
 	public int getNumBarco() {
 		return numBarco;
+	}
+	
+	public IAPlayer getIA() {
+		return IA;
 	}
 	
 	//Otros
@@ -468,7 +486,7 @@ public class Tab {
 		boolean ok = false;
 		boolean b = false;
 		if((x >= 0 && x < max) && (y >= 0 && y < max)) {
-			ok = disparar(x, y);
+			ok = this.disparar(x, y);
 			if(ok == true) {
 				if(numHistorial < maxHistorial) {
 					if(tablero[x][y] == 'B') b = true;
@@ -484,7 +502,7 @@ public class Tab {
 	 * Comprueba si el barco esta undido 
 	 * @param pos
 	 */
-	private void compBarco(int pos) {
+	private boolean compBarco(int pos) {
 		boolean ok = false;
 		if(barcos[pos] instanceof Barco2 != false) {
 			ok = this.barco2Ok((Barco2) barcos[pos]);
@@ -504,7 +522,7 @@ public class Tab {
 				}
 			}
 		}
-		if(ok) System.out.println("Barco undido :)");
+		return ok;
 	}
 	
 	private boolean barco2Ok(Barco2 barco) {
@@ -653,14 +671,16 @@ public class Tab {
 					}
 				}
 			}
-			if(ok == false) {
+			if(ok == true) {
+				tablero[x][y] = 'B';
+				i--;
+				if(this.compBarco(i) == true) System.out.println("Barco Undido.");
+			}
+			else {
 				tablero[x][y] = 'A';
 				ok = true;
 			}
-			else {
-				i--;
-				this.compBarco(i);
-			}
+			
 		}
 		return ok;
 	}
@@ -679,10 +699,7 @@ public class Tab {
 		int yb = barcos[pos].getY1();
 		while(ok != true && p < 2) {
 			ok = igualPos(xb, yb, x, y);
-			if(ok) {
-				tablero[x][y] = 'B';
-			}
-			else {
+			if(ok != true) {
 				p++;
 				switch(p) {
 				case 1:
@@ -702,10 +719,7 @@ public class Tab {
 		int yb = barcos[pos].getY1();
 		while(ok != true && p < 3) {
 			ok = igualPos(xb, yb, x, y);
-			if(ok) {
-				tablero[x][y] = 'B';
-			}
-			else {
+			if(ok != true){
 				p++;
 				switch(p) {
 				case 1:
@@ -729,10 +743,7 @@ public class Tab {
 		int yb = barcos[pos].getY1();
 		while(ok != true && p < 4) {
 			ok = igualPos(xb, yb, x, y);
-			if(ok) {
-				tablero[x][y] = 'B';
-			}
-			else {
+			if(ok != true) {
 				p++;
 				switch(p) {
 				case 1:
@@ -760,10 +771,7 @@ public class Tab {
 		int yb = barcos[pos].getY1();
 		while(ok != true && p < 5) {
 			ok = igualPos(xb, yb, x, y);
-			if(ok) {
-				tablero[x][y] = 'B';
-			}
-			else {
+			if(ok != true){
 				p++;
 				switch(p) {
 				case 1:
@@ -798,7 +806,7 @@ public class Tab {
 	 */
 	public void viewHistory() {
 		for(int i = numHistorial - 1; i >= 0; i--) {
-			System.out.print("Tirades realitzades sobre el taulell del propietari " + this.getPropietaryTab() + " ");
+			System.out.print(i + " Tirades realitzades sobre el taulell del propietari " + this.getPropietaryTab() + " ");
 			historial[i].visualizar();
 		}
 	}
@@ -909,4 +917,46 @@ public class Tab {
 		}while(ok != true);
 		return dir;
 	}
+	
+	public void iaArm() {
+		if(IA != null && propietaryTab == Player.MAQUINA) {
+			this.IA.armIA(this);
+		}
+	}
+	
+	public boolean undit(int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		while(p < Tab.maxBarco && ok != true) {
+			ok = this.compUndido(x, y, p);
+			p++;
+		}
+		p = p - 1;
+		ok = this.compBarco(p);
+		return ok;
+	}
+	
+	private boolean compUndido(int x, int y, int p) {
+		boolean ok = false;
+		if(barcos[p] instanceof Barco2 != false) {
+			ok = this.comBarco2(p, x, y);
+		}
+		else {
+			if(barcos[p] instanceof Barco3 != false) {
+				ok = this.comBarco3(p, x, y);
+			}
+			else {
+				if(barcos[p] instanceof Barco4 != false) {
+					ok = this.comBarco4(p, x, y);
+				}
+				else {
+					if(barcos[p] instanceof Barco5 != false) {
+						ok = this.comBarco5(p, x, y);
+					}
+				}
+			}
+		}
+		return ok;
+	}
+	
 }
