@@ -77,14 +77,30 @@ public abstract class Barco {
 		return posiciones;
 	}
 	//otros
+	/*Comprova una posicio x o y, per tal de que no surti del taulell.*/
 	private boolean compP(int x, Tab tabl) {
 		if(x >= 0 && x < Tab.getMax()) return true;
 		return false;
 	}
 	
+	/*Calcula les posicions del baixell en questio.*/
 	public abstract void calPos();
 	
+	/*clona un baixell a un altre baixell.*/
 	public abstract void clonar(Barco b, Tab tablero);
 	
+	/*Bisualitza el baixell.*/
 	public abstract void visualizar();
+	
+	/*Comprova si les posicions són iguals, tots els baixells criden a a quest methode.*/
+	public static boolean igualPos(int xb, int yb, int x, int y) {
+		if(xb == x && yb == y) return true;
+		return false;
+	}
+	
+	/*Comprova si la posicio pasada per parametre (x, y) es troben al baixell.*/
+	public abstract boolean comprobarBarco(int x, int y);
+	
+	/*Comprova després de cada tirada si el baixell esta enfonsat al taulell que es pasa per parametre, si ho esta canviara l'estat de undit a true.*/
+	public abstract boolean barcoOk(char[][] tablero);
 }

@@ -17,27 +17,36 @@ public class Run {
 		boolean ok = false;
 		boolean tmp = false;
 		int inp = 0;
+		tablero.viewBarcos();
 		while(ok != true) {
 			tmp = false;
-			int x = 0;
-			int y = 0;
+			/*int x = 0;
+			int y = 0;*/
 			int aux = 0;
-			/*while(tmp == false) {*/
+			while(tmp == false) {
 				/*x = Tab.inpPos("Introdueix la posició x a la que disparar: ");
-				y = Tab.inpPos("Introdueix la posició y a la que disparar: ");
-				tmp = tablero.gestDispar(x, y, Player.PLAYER);
-				if(tmp == false) {
+				y = Tab.inpPos("Introdueix la posició y a la que disparar: ");*/
+				/*tmp = tablero.gestDispar(x, y, Player.PLAYER);*/
+				/*if(tmp == false) {
 					System.out.println("Tria un altre casella");
 					reader.nextLine();
+				}
+				else {
+					boolean undit = false;
+					undit = tablero.undit(x, y);
+					if(undit == true) System.out.println("Baixell undit.");
 				}*/
-				tablero.iaArm();
-			//}
+				tablero.getIA().armIA(tablero);
+				tmp = true;
+			}
 			System.out.println("");
 			tablero.viewTab();
 			System.out.println("");
-			aux = inpSalir("Vols sortir (1 = continuar, 2 = salir): ");
+			/*aux = inpSalir("Vols sortir (1 = continuar, 2 = salir): ");*/
+			/*aux = 1; //tmp
 			if(aux == 1) ok = false;
-			else ok = true;
+			else ok = true;*/
+			ok = tablero.comprobarBarcosTodos();
 			inp++;
 		}
 		System.out.println("Disparos de la maquina: " + inp);

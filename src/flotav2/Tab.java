@@ -130,14 +130,16 @@ public class Tab {
 		if((x >= 0 && x < max) && (y >= 0 && y < max)) {
 			return tablero[x][y];
 		}
-		return 'D';
+		return 'A';
 	}
 	
+	/*Comproba si un balor és mes gran que el valor per defecte de max*/
 	private boolean compMax(int value) {
-		if(value > 10) return true;
+		if(value > max) return true;
 		else return false;
 	}
 	
+	/*Mostra el taulell per consola*/
 	public void viewTab() {
 		System.out.print("   ");
 		for(int p = 0; p < max; p++) {
@@ -152,6 +154,7 @@ public class Tab {
 		System.out.println("");
 	}
 	
+	/*Inicia el taulell amb el caracter pasat per parametre*/
 	private void iniTablero(char car) {
 		for(int i = 0; i < max; i++) {
 			for(int p = 0; p < max; p++) {
@@ -187,11 +190,12 @@ public class Tab {
 		return ok;
 	}
 	
+	//calcula la posicio final hon terminara el baixell, per la seva comprovació
 	private boolean calPosFin(int x1, int y1, int pos, Tab tablero, int direc) {
 		boolean ok = false;
 		int x = x1;
 		int y = y1;
-		switch(direc) { //calcula la posicio final hon terminara el baixell, per la seva comprovació
+		switch(direc) { 
 		case 0:
 			y = y + (pos - 1);
 			break;
@@ -219,6 +223,7 @@ public class Tab {
 		return ok;
 	}
 	
+	//comprova la posicio pasada per parametre al taulell pasat per parametre segons la direccio pasada per parametre, pos és el numero de posicions que te el baixell.
 	private boolean comprovarPosiciones(int x1, int y1, int pos, Tab tablero, int direc) {
 		boolean ok = true;
 		if(direc == 0 || direc == 1) ok = comprovarPos01(x1, y1, pos, tablero);
@@ -226,6 +231,7 @@ public class Tab {
 		return ok;
 	}
 	
+	//comprova la posicio pasada per parametre al taulell pasat per parametre per les direccions 0 i 1 'dreta o esquerra', pos és el numero de posicions que te el baixell.
 	private boolean comprovarPos01(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
@@ -328,6 +334,7 @@ public class Tab {
 		return ok;
 	}
 	
+	//comprova la posicio pasada per parametre al taulell pasat per parametre per les direccions 2 i 3 'de 9 a 0 o de 0 a 9', pos és el numero de posicions que te el baixell.
 	private boolean comprovarPos23(int x1, int y1, int pos, Tab tablero) {
 		boolean ok = true;
 		char[][] map = tablero.getTablero();
@@ -428,7 +435,7 @@ public class Tab {
 	}
 	
 	/**
-	 * escribe en el tablero (matriz de caracteres)
+	 * escribe en el tablero (matriz de caracteres), aquest methode nomes s'utilitza d'urant la generació aleatoria per comrpobar que les posicions dels baixells compleixen les normes.
 	 */
 	private void escribir(Tab tablero, int x1, int y1, int dir, int pos) {
 		char[][] map = tablero.getTablero();
@@ -492,153 +499,11 @@ public class Tab {
 					if(tablero[x][y] == 'B') b = true;
 					historial[numHistorial] = new History(player, x, y, b, this);
 					numHistorial++;
+					System.out.println("Si");
 				}
 			}
 		}
 		return ok; //si devuelve un true es que se ha disparado a la posicion, si devuelve un false es que en la posicion se ha disparado antes
-	}
-	
-	/**
-	 * Comprueba si el barco esta undido 
-	 * @param pos
-	 */
-	private boolean compBarco(int pos) {
-		boolean ok = false;
-		if(barcos[pos] instanceof Barco2 != false) {
-			ok = this.barco2Ok((Barco2) barcos[pos]);
-		}
-		else {
-			if(barcos[pos] instanceof Barco3 != false) {
-				ok = this.barco3Ok((Barco3) barcos[pos]);
-			}
-			else {
-				if(barcos[pos] instanceof Barco4 != false) {
-					ok = this.barco4Ok((Barco4) barcos[pos]);
-				}
-				else {
-					if(barcos[pos] instanceof Barco5 != false) {
-						ok = this.barco5Ok((Barco5) barcos[pos]);
-					}
-				}
-			}
-		}
-		return ok;
-	}
-	
-	private boolean barco2Ok(Barco2 barco) {
-		int xb, yb;
-		boolean ok = true;
-		int p = 0;
-		xb = barco.getX1();
-		yb = barco.getY1();
-		
-		while(ok != false && p < 2) {
-			if(tablero[xb][yb] != 'B') ok = false;
-			else {
-				p++;
-				switch(p) {
-				case 1:
-					xb = barco.getX2();
-					yb = barco.getY2();
-					break;
-				}
-			}
-		}
-		if(ok == true) barco.setUndido(true);
-		return ok;
-	}
-	
-	private boolean barco3Ok(Barco3 barco) {
-		int xb, yb;
-		boolean ok = true;
-		int p = 0;
-		xb = barco.getX1();
-		yb = barco.getY1();
-		
-		while(ok != false && p < 3) {
-			if(tablero[xb][yb] != 'B') ok = false;
-			else {
-				p++;
-				switch(p) {
-				case 1:
-					xb = barco.getX2();
-					yb = barco.getY2();
-					break;
-				case 2:
-					xb = barco.getX3();
-					yb = barco.getY3();
-					break;
-				}
-			}
-		}
-		if(ok == true) barco.setUndido(true);
-		return ok;
-	}
-	
-	private boolean barco4Ok(Barco4 barco) {
-		int xb, yb;
-		boolean ok = true;
-		int p = 0;
-		xb = barco.getX1();
-		yb = barco.getY1();
-		
-		while(ok != false && p < 4) {
-			if(tablero[xb][yb] != 'B') ok = false;
-			else {
-				p++;
-				switch(p) {
-				case 1:
-					xb = barco.getX2();
-					yb = barco.getY2();
-					break;
-				case 2:
-					xb = barco.getX3();
-					yb = barco.getY3();
-					break;
-				case 3:
-					xb = barco.getX4();
-					yb = barco.getY4();
-					break;
-				}
-			}
-		}
-		if(ok == true) barco.setUndido(true);
-		return ok;
-	}
-	
-	private boolean barco5Ok(Barco5 barco) {
-		int xb, yb;
-		boolean ok = true;
-		int p = 0;
-		xb = barco.getX1();
-		yb = barco.getY1();
-		
-		while(ok != false && p < 5) {
-			if(tablero[xb][yb] != 'B') ok = false;
-			else {
-				p++;
-				switch(p) {
-				case 1:
-					xb = barco.getX2();
-					yb = barco.getY2();
-					break;
-				case 2:
-					xb = barco.getX3();
-					yb = barco.getY3();
-					break;
-				case 3:
-					xb = barco.getX4();
-					yb = barco.getY4();
-					break;
-				case 4:
-					xb = barco.getX5();
-					yb = barco.getY5();
-					break;
-				}
-			}
-		}
-		if(ok == true) barco.setUndido(true);
-		return ok;
 	}
 	
 	/**
@@ -653,19 +518,19 @@ public class Tab {
 			int i = 0;
 			for(i = 0; i < maxBarco && ok != true; i++) {
 				if(barcos[i] instanceof Barco2 != false) {
-					ok = this.comBarco2(i, x, y);
+					ok = ((Barco2) barcos[i]).comprobarBarco(x, y);
 				}
 				else {
 					if(barcos[i] instanceof Barco3 != false) {
-						ok = this.comBarco3(i, x, y);
+						ok = ((Barco3) barcos[i]).comprobarBarco(x, y);
 					}
 					else {
 						if(barcos[i] instanceof Barco4 != false) {
-							ok = this.comBarco4(i, x, y);
+							ok = ((Barco4) barcos[i]).comprobarBarco(x, y);
 						}
 						else {
 							if(barcos[i] instanceof Barco5 != false) {
-								ok = this.comBarco5(i, x, y);
+								ok = ((Barco5) barcos[i]).comprobarBarco(x, y);
 							}
 						}
 					}
@@ -673,132 +538,14 @@ public class Tab {
 			}
 			if(ok == true) {
 				tablero[x][y] = 'B';
-				i--;
-				if(this.compBarco(i) == true) System.out.println("Barco Undido.");
 			}
 			else {
 				tablero[x][y] = 'A';
 				ok = true;
 			}
-			
+			/*falta llamar a comprovar el barco*/
 		}
 		return ok;
-	}
-	
-	/**
-	 * Comprueba si la posicion en la que se ha disparado se encuentra algun barco2
-	 * @param pos
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private boolean comBarco2(int pos, int x, int y) {
-		boolean ok = false;
-		int p = 0;
-		int xb = barcos[pos].getX1();
-		int yb = barcos[pos].getY1();
-		while(ok != true && p < 2) {
-			ok = igualPos(xb, yb, x, y);
-			if(ok != true) {
-				p++;
-				switch(p) {
-				case 1:
-					xb = ((Barco2) barcos[pos]).getX2();
-					yb = ((Barco2) barcos[pos]).getY2();
-					break;
-				}
-			}
-		}
-		return ok;
-	}
-	
-	private boolean comBarco3(int pos, int x, int y) {
-		boolean ok = false;
-		int p = 0;
-		int xb = barcos[pos].getX1();
-		int yb = barcos[pos].getY1();
-		while(ok != true && p < 3) {
-			ok = igualPos(xb, yb, x, y);
-			if(ok != true){
-				p++;
-				switch(p) {
-				case 1:
-					xb = ((Barco3) barcos[pos]).getX2();
-					yb = ((Barco3) barcos[pos]).getY2();
-					break;
-				case 2:
-					xb = ((Barco3) barcos[pos]).getX3();
-					yb = ((Barco3) barcos[pos]).getY3();
-					break;
-				}
-			}
-		}
-		return ok;
-	}
-	
-	private boolean comBarco4(int pos, int x, int y) {
-		boolean ok = false;
-		int p = 0;
-		int xb = barcos[pos].getX1();
-		int yb = barcos[pos].getY1();
-		while(ok != true && p < 4) {
-			ok = igualPos(xb, yb, x, y);
-			if(ok != true) {
-				p++;
-				switch(p) {
-				case 1:
-					xb = ((Barco4) barcos[pos]).getX2();
-					yb = ((Barco4) barcos[pos]).getY2();
-					break;
-				case 2:
-					xb = ((Barco4) barcos[pos]).getX3();
-					yb = ((Barco4) barcos[pos]).getY3();
-					break;
-				case 3:
-					xb = ((Barco4) barcos[pos]).getX4();
-					yb = ((Barco4) barcos[pos]).getY4();
-					break;
-				}
-			}
-		}
-		return ok;
-	}
-	
-	private boolean comBarco5(int pos, int x, int y) {
-		boolean ok = false;
-		int p = 0;
-		int xb = barcos[pos].getX1();
-		int yb = barcos[pos].getY1();
-		while(ok != true && p < 5) {
-			ok = igualPos(xb, yb, x, y);
-			if(ok != true){
-				p++;
-				switch(p) {
-				case 1:
-					xb = ((Barco5) barcos[pos]).getX2();
-					yb = ((Barco5) barcos[pos]).getY2();
-					break;
-				case 2:
-					xb = ((Barco5) barcos[pos]).getX3();
-					yb = ((Barco5) barcos[pos]).getY3();
-					break;
-				case 3:
-					xb = ((Barco5) barcos[pos]).getX4();
-					yb = ((Barco5) barcos[pos]).getY4();
-					break;
-				case 4:
-					xb = ((Barco5) barcos[pos]).getX5();
-					yb = ((Barco5) barcos[pos]).getY5();
-					break;
-				}
-			}
-		}
-		return ok;
-	}
-	
-	private boolean igualPos(int xb, int yb, int x, int y) {
-		if(xb == x && yb == y) return true;
-		return false;
 	}
 	
 	/**
@@ -811,6 +558,7 @@ public class Tab {
 		}
 	}
 	
+	/*Mostra un baixell del array de  baixells*/
 	public void viewBarcos() {
 		for(int p = 0; p < maxBarco; p++){
 			barcos[p].visualizar();
@@ -879,6 +627,7 @@ public class Tab {
 		}
 	}
 	
+	//permet la entrada de les posicions on és trobaran els baixells.
 	public static int inpPos(String out) {
 		boolean ok = false;
 		int pos = -1;
@@ -890,6 +639,7 @@ public class Tab {
 		return pos;
 	}
 	
+	//permet la entrada de ints.
 	public static int inpInt(String out) {
 		boolean ok = false;
 		int inp = 0;
@@ -907,6 +657,7 @@ public class Tab {
 		return inp;
 	}
 	
+	//permet la entrada de les direccions.
 	public static int inpDir(String out) {
 		boolean ok = false;
 		int dir = -1;
@@ -918,12 +669,14 @@ public class Tab {
 		return dir;
 	}
 	
+	//crida a la ia per gestionar una tirada, nomes si el propietari del taulell és la maquina.
 	public void iaArm() {
 		if(IA != null && propietaryTab == Player.MAQUINA) {
 			this.IA.armIA(this);
 		}
 	}
 	
+	//Comprova si el baixell de la posicio pasada per parametre esta undit.
 	public boolean undit(int x, int y) {
 		boolean ok = false;
 		int p = 0;
@@ -932,29 +685,66 @@ public class Tab {
 			p++;
 		}
 		p = p - 1;
-		ok = this.compBarco(p);
+		ok = this.comprobarBarcos(p); //si es true barco undido
 		return ok;
 	}
 	
+	//Busca el baixell al qual pertany les posicions pasades per paramete, p indica la posicio del baixell a l'array de baixells
 	private boolean compUndido(int x, int y, int p) {
 		boolean ok = false;
 		if(barcos[p] instanceof Barco2 != false) {
-			ok = this.comBarco2(p, x, y);
+			ok = ((Barco2) barcos[p]).comprobarBarco(x, y);
 		}
 		else {
 			if(barcos[p] instanceof Barco3 != false) {
-				ok = this.comBarco3(p, x, y);
+				ok = ((Barco3) barcos[p]).comprobarBarco(x, y);
 			}
 			else {
 				if(barcos[p] instanceof Barco4 != false) {
-					ok = this.comBarco4(p, x, y);
+					ok = ((Barco4) barcos[p]).comprobarBarco(x, y);
 				}
 				else {
 					if(barcos[p] instanceof Barco5 != false) {
-						ok = this.comBarco5(p, x, y);
+						ok = ((Barco5) barcos[p]).comprobarBarco(x, y);
 					}
 				}
 			}
+		}
+		return ok;
+	}
+	
+	/**
+	 * Comprueba si el barco esta undido 
+	 * @param pos
+	 */
+	private boolean comprobarBarcos(int pos) {
+		boolean ok = false;
+		if(barcos[pos] instanceof Barco2 != false) {
+			ok = ((Barco2) barcos[pos]).barcoOk(tablero);
+		}
+		else {
+			if(barcos[pos] instanceof Barco3 != false) {
+				ok = ((Barco3) barcos[pos]).barcoOk(tablero);
+			}
+			else {
+				if(barcos[pos] instanceof Barco4 != false) {
+					ok = ((Barco4) barcos[pos]).barcoOk(tablero);
+				}
+				else {
+					if(barcos[pos] instanceof Barco5 != false) {
+						ok = ((Barco5) barcos[pos]).barcoOk(tablero);
+					}
+				}
+			}
+		}
+		return ok;
+	}
+	
+	//indica si todos los barcos estan undidos.
+	public boolean comprobarBarcosTodos() {
+		boolean ok = true;
+		for(int i = 0; i < Tab.getMaxBarco() && ok != false; i++) {
+			if(barcos[i].getUndido() != true) ok = false;
 		}
 		return ok;
 	}

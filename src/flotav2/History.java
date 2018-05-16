@@ -1,5 +1,5 @@
 package flotav2;
-
+//emmagatzema les tirades dels jugadors als taulells dels jugadors ribals.
 public class History {
 	private Player player;
 	private int x1;
@@ -63,15 +63,18 @@ public class History {
 	}
 	
 	//otros
+	//comprova que la posicio del taulell és corecta 
 	private boolean compPos(int x, Tab tablero) {
-		if(x >= 0 && x < tablero.getMax()) return true;
+		if(x >= 0 && x < Tab.getMax()) return true;
 		return false;
 	}
 	
+	//Visualitza aquest registre o historial.
 	public void visualizar() {
 		System.out.println(this.toString());
 	}
 	
+	@Override
 	public String toString() {
 		return "Tirada del jugador " + player + " a les posicions x: " + x1 + " i y: " + y1 + ", el resultat a estat " + tocat + ".";
 	}

@@ -96,4 +96,58 @@ public class Barco3 extends Barco {
 	public String toString() {
 		return "Barco de 3 posiciones: x1 = " + super.getX1() + " y1 = " + super.getY1() + " x2 = " + this.getX2() + " y2 = " + this.getY2() + " x3 = " + this.getX3() + " y3 = " + this.getY3() + " direccion = " + super.getDireccion() + " undido = " + super.getUndido() + ".";
 	}
+	
+	/*comprueba si el barco esta undido*/
+	@Override
+	public boolean barcoOk(char[][] tablero) {
+		boolean ok = true;
+		int xb, yb;
+		xb = this.getX1();
+		yb = this.getY1();
+		int p = 0;
+		while(ok != false && p < 3) {
+			p++;
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				switch(p) {
+				case 1:
+					xb = this.getX2();
+					yb = this.getY2();
+					break;
+				case 2:
+					xb = this.getX3();
+					yb = this.getY3();
+					break;
+				}
+			}
+		}
+		if(ok == true) this.setUndido(true);
+		return ok;
+	}
+	
+	/*Comprueba en las posiciones x i y se encuentra este barco*/
+	@Override
+	public boolean comprobarBarco(int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = this.getX1();
+		int yb = this.getY1();
+		while(ok != true && p < 3) {
+			p++;
+			ok = Barco.igualPos(xb, yb, x, y);
+			if(ok != true) {
+				switch(p) {
+				case 1:
+					xb = this.getX2();
+					yb = this.getY2();
+					break;
+				case 2:
+					xb = this.getX3();
+					yb = this.getY3();
+					break;
+				}
+			}
+		}
+		return ok;
+	}
 }

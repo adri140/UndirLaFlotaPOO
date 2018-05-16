@@ -76,4 +76,50 @@ public class Barco2 extends Barco {
 		this.x2 = ((Barco2) b).getX2();
 		this.y2 = ((Barco2) b).getY2();
 	}
+	
+	/*Comprueba en las posiciones x i y se encuentra este barco*/
+	@Override
+	public boolean comprobarBarco(int x, int y) {
+		boolean ok = false;
+		int p = 0;
+		int xb = this.getX1();
+		int yb = this.getY1();
+		while(ok != true && p < 2) {
+			p++;
+			ok = Barco.igualPos(xb, yb, x, y);
+			if(ok != true) {
+				switch(p) {
+				case 1:
+					xb = this.getX2();
+					yb = this.getY2();
+					break;
+				}
+			}
+		}
+		return ok;
+	}
+	
+	/*Comprueba si el barco esta undido*/
+	@Override
+	public boolean barcoOk(char[][] tablero) {
+		boolean ok = true;
+		int xb, yb;
+		xb = this.getX1();
+		yb = this.getY1();
+		int p = 0;
+		while(ok != false && p < 2) {
+			p++;
+			if(tablero[xb][yb] != 'B') ok = false;
+			else {
+				switch(p) {
+				case 1:
+					xb = this.getX2();
+					yb = this.getY2();
+					break;
+				}
+			}
+		}
+		if(ok == true) this.setUndido(true);
+		return ok;
+	}
 }
