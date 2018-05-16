@@ -8,22 +8,26 @@ public class Run {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Tab tablero = new Tab();
-		tablero = genTab(Player.MAQUINA);
-		tablero.reiniTab();
-		System.out.println("");
-		tablero.viewTab();
-		System.out.println("");
+		Tab tabMaquina = new Tab(Player.MAQUINA);
+		tabMaquina = genTab(Player.MAQUINA);
+		Tab tabPlayer = new Tab(Player.PLAYER);
+		
+		tabMaquina.viewBarcos();
+		
+		tabPlayer.genTab(Player.PLAYER);
+		
+		
+		/*System.out.println("");
 		boolean ok = false;
 		boolean tmp = false;
 		int inp = 0;
 		tablero.viewBarcos();
 		while(ok != true) {
-			tmp = false;
+			tmp = false;*/
 			/*int x = 0;
 			int y = 0;*/
-			int aux = 0;
-			while(tmp == false) {
+			/*int aux = 0;
+			while(tmp == false) {*/
 				/*x = Tab.inpPos("Introdueix la posició x a la que disparar: ");
 				y = Tab.inpPos("Introdueix la posició y a la que disparar: ");*/
 				/*tmp = tablero.gestDispar(x, y, Player.PLAYER);*/
@@ -36,23 +40,23 @@ public class Run {
 					undit = tablero.undit(x, y);
 					if(undit == true) System.out.println("Baixell undit.");
 				}*/
-				tablero.getIA().armIA(tablero);
+				/*tablero.getIA().armIA(tablero);
 				tmp = true;
 			}
 			System.out.println("");
 			tablero.viewTab();
-			System.out.println("");
+			System.out.println("");*/
 			/*aux = inpSalir("Vols sortir (1 = continuar, 2 = salir): ");*/
 			/*aux = 1; //tmp
 			if(aux == 1) ok = false;
 			else ok = true;*/
-			ok = tablero.comprobarBarcosTodos();
-			inp++;
-		}
-		System.out.println("Disparos de la maquina: " + inp);
-		tablero.viewBarcos();
+			/*ok = tablero.comprobarBarcosTodos();
+			inp++;*/
+		//}
+		//System.out.println("Disparos de la maquina: " + inp);
+		/*tabMaquina.viewBarcos();
 		System.out.println("");
-		tablero.viewHistory();
+		tabMaquina.viewHistory();*/
 	}
 	
 	private static Tab genTab(Player propietario) {

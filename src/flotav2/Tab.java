@@ -625,6 +625,7 @@ public class Tab {
 				else this.setNumBarco(this.getNumBarco() - 1);
 			}
 		}
+		this.reiniTab();
 	}
 	
 	//permet la entrada de les posicions on és trobaran els baixells.
