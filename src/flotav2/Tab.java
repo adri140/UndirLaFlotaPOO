@@ -586,8 +586,9 @@ public class Tab implements java.io.Serializable {
 		int x1, y1, dir;
 		boolean ok = false;
 		if(pla == Player.PLAYER) {
+			System.out.println("\nIntrodueix la teva distribució.");
 			this.viewTab();
-			System.out.println("Introdueix les posicions pel vaixell de 2 posicions: ");
+			System.out.println("\nIntrodueix les posicions pel vaixell de 2 posicions: ");
 		}
 		int i = 0;
 		while(i < Tab.getMaxBarco()) {
@@ -598,29 +599,36 @@ public class Tab implements java.io.Serializable {
 				dir = Entradas.RandomInt(4);
 			}
 			else {
+				
 				x1 = Tab.inpPos("Introdueix la posició x: ");
 				y1 = Tab.inpPos("Introdueix la posició y: ");
 				dir = Entradas.inpDir("Introdueix la direcció del vaixell \n0 - Cap a la dreta.\n1 - Cap a la esquerra.\n2 - Cap a adalt.\n3 - Cap a abaix.\nOpció: ");
+				System.out.println("");
 			}
 			switch(i) {
 			case 0: //barco2
 				this.insertarBarco(new Barco2(x1, y1, dir, this));
 				ok = this.comprovar(i);
-				if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
+				/*if(ok == true && pla == Player.PLAYER) {
+					i++;
+					this.viewTab();
+					System.out.println("");
+				}*/
+				//if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
 				break;
 			case 1: //barco3
 			case 2:
 				this.insertarBarco(new Barco3(x1, y1, dir, this));
 				ok = this.comprovar(i);
-				if(pla == Player.PLAYER && i == 1) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
+				/*if(pla == Player.PLAYER && i == 1) System.out.println("Introdueix les posicions pel vaixell de 3 posicions: ");
 				else {
 					if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 4 posicions: ");
-				}
+				}*/
 				break;
 			case 3: //barco4
 				this.insertarBarco(new Barco4(x1, y1, dir, this));
 				ok = this.comprovar(i);
-				if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 5 posicions: ");
+				//if(pla == Player.PLAYER) System.out.println("Introdueix les posicions pel vaixell de 5 posicions: ");
 				break;
 			case 4: //barco5
 				this.insertarBarco(new Barco5(x1, y1, dir, this));
@@ -630,11 +638,12 @@ public class Tab implements java.io.Serializable {
 			if(ok == true && pla == Player.PLAYER) {
 				i++;
 				this.viewTab();
-				System.out.println("");
+				if(i == 2) System.out.println("\nIntrodueix les posicions pel vaixell de 3 posicions: ");
+				else System.out.println("\nIntrodueix les posicions pel vaixell de " + (i + 2) + " posicions: ");
 			}
 			else {
-				if(ok == true) i++;
-				else this.setNumBarco(this.getNumBarco() - 1);
+			if(ok == true) i++;
+			else this.setNumBarco(this.getNumBarco() - 1);
 			}
 		}
 		this.reiniTab();

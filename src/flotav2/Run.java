@@ -190,7 +190,7 @@ public class Run {
 					}
 				}
 		
-				System.out.println("El teu taulell i els logs.");
+				System.out.println("\nEl teu taulell i els logs.");
 				tabPlayer.viewTab();
 				System.out.println("");
 				tabPlayer.viewHistory();
