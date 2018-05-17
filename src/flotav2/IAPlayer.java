@@ -1,10 +1,8 @@
 package flotav2;
 
-import java.util.Random;
-
 public class IAPlayer {
 	private int[] memoria;
-	final static Random rnd = new Random();
+	private int dificultad = 2;
 	
 	//Constructores
 	public IAPlayer() {
@@ -17,6 +15,10 @@ public class IAPlayer {
 		this.memoria = array;
 	}
 	
+	public void setDificultad(int dif) {
+		if(dif >= 1 && dif < 3) dificultad = dif;
+	}
+	
 	//getters
 	public int[] getMemoria() {
 		return memoria;
@@ -24,18 +26,21 @@ public class IAPlayer {
 	
 	//otros
 	/*Gestiona tota la tirada de la maquina.*/
-	public void armIA(Tab tablero) {
+	public boolean armIA(Tab tablero) {
 		boolean ok = false;
 		int x, y;
+		boolean undit = false;
 		do {
 			if(memoria[0] == -1) {
-				x = rnd.nextInt(Tab.getMax());
-				y = rnd.nextInt(Tab.getMax());
+				x = Entradas.RandomInt(Tab.getMax());
+				y = Entradas.RandomInt(Tab.getMax());
 				if(tablero.getPos(x, y) == '?') {
-					ok = this.comRededor(x, y, tablero); //revisarrr
+					if(dificultad > 1) ok = this.comRededor(x, y, tablero); //revisarrr
+					else ok = true;
 					if(ok != false) {
 						ok = tablero.gestDispar(x, y, Player.MAQUINA);
 						if(ok == true && tablero.getPos(x, y) == 'B') {
+							System.out.println("Baixell aliat tocat.");
 							this.memoria[0] = x;
 							this.memoria[1] = y;
 						}
@@ -72,14 +77,14 @@ public class IAPlayer {
 					}
 					else {
 						if((tablero.getPos(x + 1, y) == 'B' || tablero.getPos(x - 1, y) == 'B')||(tablero.getPos(x, y + 1) == 'A' && tablero.getPos(x, y - 1) == 'A')) {
-							direccion = rnd.nextInt(2) + 2;
+							direccion = Entradas.RandomInt(2) + 2;
 							if(tablero.getPos(x + 1, y) == 'B' || tablero.getPos(x - 1, y) == 'B') {
 								x = this.recursivityX(x, y, tablero, direccion);
 								ok = true;
 							}
 						}
 						else {
-							direccion = rnd.nextInt(2);
+							direccion = Entradas.RandomInt(2);
 							if(tablero.getPos(x, y + 1) == 'B' || tablero.getPos(x, y - 1) == 'B') {
 								y = this.recursivityY(x, y, tablero, direccion);
 								ok = true;
@@ -89,21 +94,24 @@ public class IAPlayer {
 					
 				}while (ok != true);
 				
-				System.out.println(x + ";" + y + ";" + direccion);
+				//System.out.println(x + ";" + y + ";" + direccion);
 				ok = tablero.gestDispar(x, y, Player.MAQUINA);
 				
 				if(ok == true && tablero.getPos(x, y) == 'B') {
 					if(tablero.undit(x, y)) {
-						System.out.println("Undit");
+						System.out.println("Baixell aliat enfonsat.");
 						this.memReset();
+						undit = true;
 					}
 					else {
+						System.out.println("Baixell aliat tocal.");
 						this.memoria[0] = x;
 						this.memoria[1] = y;
 					}
 				}
 			}
 		}while(ok != true);
+		return undit;
 	}
 	
 	/*Busca els baixells en bertical*/
@@ -137,28 +145,28 @@ public class IAPlayer {
 	 */
 	private boolean comRededor(int x, int y, Tab tablero) { //revisarrr
 		boolean ok = true;
-		if(x == 0 && y == 0) {
+		if(x == 0 && y == 0) { //ok
 			if(tablero.getPos(x, y) != 'B' && tablero.getPos(x + 1, y) != 'B') {
 				if(tablero.getPos(x, y + 1) == 'B' || tablero.getPos(x + 1, y + 1) == 'B') ok = false;
 			}
 			else ok = false;
 		}
 		else {
-			if(x == 0 && y == Tab.getMax() - 1) {
+			if(x == 0 && y == Tab.getMax() - 1) { //ok
 				if(tablero.getPos(x, y - 1) != 'B' && tablero.getPos(x + 1, y - 1) != 'B') {
 					if(tablero.getPos(x, y) == 'B' || tablero.getPos(x + 1, y) == 'B') ok = false;
 				}
 				else ok = false;
 			}
 			else {
-				if(x == Tab.getMax() - 1 && y == 0) {
+				if(x == Tab.getMax() - 1 && y == 0) {//ok
 					if(tablero.getPos(x, y) != 'B' && tablero.getPos(x - 1, y) != 'B') {
 						if(tablero.getPos(x, y + 1) == 'B' || tablero.getPos(x - 1, y + 1) == 'B') ok = false;
 					}
 					else ok = false;
 				}
 				else {
-					if(x == Tab.getMax() && y == Tab.getMax()) {
+					if(x == Tab.getMax() && y == Tab.getMax()) {//ok
 						if(tablero.getPos(x, y - 1) != 'B' && tablero.getPos(x - 1, y - 1) != 'B') {
 							if(tablero.getPos(x, y) == 'B' || tablero.getPos(x - 1, y) == 'B') ok = false;
 						}
@@ -227,7 +235,7 @@ public class IAPlayer {
 	public int IAgenSearch(int x, int y, int max) {
 		int resposta = 0;
 		if(x == 0 && y == 0) {
-			resposta = rnd.nextInt(2);
+			resposta = Entradas.RandomInt(2);
 			switch(resposta) {
 				case 0: resposta = 0;
 			break;
@@ -237,7 +245,7 @@ public class IAPlayer {
 		}
 		else {
 			if(x == max - 1 && y == 0) {
-				resposta = rnd.nextInt(2);
+				resposta = Entradas.RandomInt(2);
 				switch(resposta) {
 					case 0: resposta = 0;
 				break;
@@ -247,7 +255,7 @@ public class IAPlayer {
 			}
 			else {
 				if(x == 0 && y == max - 1) {
-					resposta = rnd.nextInt(2);
+					resposta = Entradas.RandomInt(2);
 					switch(resposta) {
 						case 0: resposta = 1;
 					break;
@@ -257,7 +265,7 @@ public class IAPlayer {
 				}
 				else {
 					if(x == max - 1 && y == max - 1) {
-						resposta = rnd.nextInt(2);
+						resposta = Entradas.RandomInt(2);
 						switch(resposta) {
 							case 0: resposta = 2;
 						break;
@@ -267,7 +275,7 @@ public class IAPlayer {
 					}
 					else {
 						if(x == 0) {
-							resposta = rnd.nextInt(3);
+							resposta = Entradas.RandomInt(3);
 							switch(resposta) {
 								case 0: resposta = 0;
 							break;
@@ -279,7 +287,7 @@ public class IAPlayer {
 						}
 						else {
 							if(x == max - 1) {
-								resposta = rnd.nextInt(3);
+								resposta = Entradas.RandomInt(3);
 								switch(resposta) {
 									case 0: resposta = 0;
 								break;
@@ -291,7 +299,7 @@ public class IAPlayer {
 							}
 							else {
 								if(y == 0) {
-									resposta = rnd.nextInt(3);
+									resposta = Entradas.RandomInt(3);
 									switch(resposta) {
 										case 0: resposta = 0;
 									break;
@@ -303,7 +311,7 @@ public class IAPlayer {
 								}
 								else {
 									if(y == max - 1) {
-										resposta = rnd.nextInt(3);
+										resposta = Entradas.RandomInt(3);
 										switch(resposta) {
 											case 0: resposta = 1;
 										break;
@@ -314,7 +322,7 @@ public class IAPlayer {
 										}
 									}
 									else {
-										resposta = rnd.nextInt(4);
+										resposta = Entradas.RandomInt(4);
 									}
 								}
 							}

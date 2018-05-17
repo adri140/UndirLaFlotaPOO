@@ -1,8 +1,5 @@
 package flotav2;
 
-import java.util.Scanner;
-import java.util.Random;
-
 public class Tab {
 	private Player propietaryTab;
 	private char[][] tablero;
@@ -15,7 +12,6 @@ public class Tab {
 	private static int maxHistorial; //indica el numero maximo de historiales almacenados en este tablero
 	private static int maxBarco = 5; //indica el numero maximo de varcos por tablero
 	private static int max; //indica el maximo tamanyo del tablero quadrado
-	final static Scanner reader = new Scanner(System.in);
 	
 	//Constructores
 	public Tab() {
@@ -26,7 +22,7 @@ public class Tab {
 		historial = new History[(max * max)];
 		maxHistorial = (max * max);
 		propietaryTab = Player.MAQUINA;
-		this.IA = new IAPlayer();
+		this.IA = null;
 	}
 	
 	public Tab(int max, Player propietario) {
@@ -39,7 +35,7 @@ public class Tab {
 			maxHistorial = (max * max);
 		}
 		propietaryTab = propietario;
-		if(propietaryTab == Player.MAQUINA) {
+		if(propietaryTab == Player.PLAYER) {
 			this.IA = new IAPlayer();
 		}
 		else this.IA = null;
@@ -48,7 +44,7 @@ public class Tab {
 	public Tab(Player propietario) {
 		this();
 		propietaryTab = propietario;
-		if(propietaryTab == Player.MAQUINA) {
+		if(propietaryTab == Player.PLAYER) {
 			this.IA = new IAPlayer();
 		}
 		else this.IA = null;
@@ -570,7 +566,6 @@ public class Tab {
 	 * @param pla
 	 */
 	public void genTab(Player pla) {
-		Random rnd = new Random();
 		int x1, y1, dir;
 		boolean ok = false;
 		if(pla == Player.PLAYER) {
@@ -581,14 +576,14 @@ public class Tab {
 		while(i < Tab.getMaxBarco()) {
 			ok = false;
 			if(pla == Player.MAQUINA) {
-				x1 = rnd.nextInt(Tab.getMax());
-				y1 = rnd.nextInt(Tab.getMax());
-				dir = rnd.nextInt(4);
+				x1 = Entradas.RandomInt(Tab.getMax());
+				y1 = Entradas.RandomInt(Tab.getMax());
+				dir = Entradas.RandomInt(4);
 			}
 			else {
 				x1 = Tab.inpPos("Introdueix la posició x: ");
 				y1 = Tab.inpPos("Introdueix la posició y: ");
-				dir = Tab.inpDir("Introdueix la direcció del vaixell \n0 - Cap a la dreta.\n1 - Cap a la esquerra.\n2 - Cap a adalt.\n3 - Cap a abaix.\nOpció: ");
+				dir = Entradas.inpDir("Introdueix la direcció del vaixell \n0 - Cap a la dreta.\n1 - Cap a la esquerra.\n2 - Cap a adalt.\n3 - Cap a abaix.\nOpció: ");
 			}
 			switch(i) {
 			case 0: //barco2
@@ -633,48 +628,21 @@ public class Tab {
 		boolean ok = false;
 		int pos = -1;
 		do {
-			pos = inpInt(out);
+			pos = Entradas.inpInt(out);
 			if(pos >= 0 && pos < Tab.getMax()) ok = true;
 			else System.out.println("Aquesta fila o columna no existeix");
 		}while(ok != true);
 		return pos;
 	}
 	
-	//permet la entrada de ints.
-	public static int inpInt(String out) {
-		boolean ok = false;
-		int inp = 0;
-		while(ok != true) {
-			System.out.print(out);
-			try {
-				inp = reader.nextInt();
-				ok = true;
-			}
-			catch(Exception e) {
-				System.out.println("Nomes és permeten numeros enters.");
-				reader.nextLine();
-			}
-		}
-		return inp;
-	}
-	
-	//permet la entrada de les direccions.
-	public static int inpDir(String out) {
-		boolean ok = false;
-		int dir = -1;
-		do {
-			dir = inpInt(out);
-			if(dir >= 0 && dir < 4) ok = true;
-			else System.out.println("Aquesta opció no existeix.");
-		}while(ok != true);
-		return dir;
-	}
 	
 	//crida a la ia per gestionar una tirada, nomes si el propietari del taulell és la maquina.
-	public void iaArm() {
-		if(IA != null && propietaryTab == Player.MAQUINA) {
-			this.IA.armIA(this);
+	public boolean iaArm() {
+		boolean undit = false;
+		if(IA != null && propietaryTab == Player.PLAYER) {
+			undit = this.IA.armIA(this);
 		}
+		return undit;
 	}
 	
 	//Comprova si el baixell de la posicio pasada per parametre esta undit.
