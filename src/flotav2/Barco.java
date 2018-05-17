@@ -1,6 +1,6 @@
 package flotav2;
 
-public abstract class Barco {
+public abstract class Barco implements java.io.Serializable {
 	private int x1;
 	private int y1;
 	private int direccion;  // 0 = derecha, 1 = izquierda, 2 = arriba de 9 a 0, 3 a bajo de 0 a 9

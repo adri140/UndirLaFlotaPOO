@@ -1,6 +1,6 @@
 package flotav2;
 
-public class IAPlayer {
+public class IAPlayer implements java.io.Serializable {
 	private int[] memoria;
 	private int dificultad = 2;
 	

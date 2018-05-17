@@ -2,7 +2,7 @@ package flotav2;
 
 public class Run {
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Tab tabMaquina = new Tab(Player.MAQUINA);
 		tabMaquina.genTab(Player.MAQUINA);
@@ -90,9 +90,9 @@ public class Run {
 		tabMaquina.viewHistory();
 		System.out.println("");
 		if(TabComplet) tabMaquina.viewBarcos();
-	}
+	}*/
 	
-	public static void newMenu() { //proximamente
+	public static void main(String[] args) { //proximamente
 		// TODO Auto-generated method stub
 		char salir = 'N';
 		char salir2 = 'N';
@@ -112,8 +112,13 @@ public class Run {
 				
 				Tab tabPlayer = null;
 				
-				if(cargar == true) {					
-					Entradas.Cargar(tabMaquina, tabPlayer);
+				if(cargar == true) {
+					Entradas.ScannerLine();
+					System.out.println("\nUna partida Guardada consta de dos fitxers (.part1, .part2), l'extencio a buscar és posara automaticament, és a dir, introdueix nomes el nom de l'arxiu.");
+					System.out.println("Fitxer .part1");
+					tabMaquina = Entradas.Cargar(1);
+					System.out.println("\nFitxer .part2");
+					tabPlayer = Entradas.Cargar(2);
 				}
 				else {
 					tabMaquina = new Tab(Player.MAQUINA);
@@ -124,17 +129,17 @@ public class Run {
 					
 					tabPlayer.getIA().setDificultad(Entradas.inpDificult("Introdueix el nivell de la dificultat (1: normal, 2: dificil) "));
 				}
-				
+				salir = 'N';
+				TabComplet = false;
 				int player = 1; //1, 2
 		
 				//tabMaquina.viewBarcos();
 		
 				while(TabComplet != true && salir != 'S') {
 					player = 1;
-					System.out.println("El teu taulell.");
+					System.out.println("\nEl teu taulell.");
 					tabPlayer.viewTab();
-					System.out.println("");
-					System.out.println("El taulell de l'oponent.");
+					System.out.println("\nEl taulell de l'oponent.");
 					tabMaquina.viewTab();
 					System.out.println("");
 					while(player < 3 && TabComplet != true) {
@@ -190,8 +195,10 @@ public class Run {
 				System.out.println("");
 				tabPlayer.viewHistory();
 				System.out.println("");
-				if(TabComplet)	tabPlayer.viewBarcos();
-				System.out.println("");
+				if(TabComplet) {
+					tabPlayer.viewBarcos();
+					System.out.println("");
+				}
 				System.out.println("El taulell de l'oponent iu els logs.");
 				tabMaquina.viewTab();
 				System.out.println("");
@@ -201,8 +208,13 @@ public class Run {
 				
 				if(TabComplet != true) {
 					guardar = Entradas.guardar();
-					if(guardar = true) {
-						Entradas.Grabar(tabMaquina, tabPlayer);
+					if(guardar == true) {
+						Entradas.ScannerLine();
+						System.out.println("El guardat consisteix en dos fitxers (.part1, .part2), l'extenio és posara automaticament, és a dir, introdueix nomes el nom de l'arxiu.");
+						System.out.println("Fitxer .part1");
+						Entradas.grabar(1, tabMaquina);
+						System.out.println("\nFitxer .part2");
+						Entradas.grabar(2, tabPlayer);
 					}
 				}
 			}
@@ -212,7 +224,7 @@ public class Run {
 	public static char novoMenu() {
 		char option;
 		do {
-			option = Entradas.inpChar("J.-Jugar.\nS.-Sortir.\nC.-Cargar partida.\nOpció:");
+			option = Entradas.inpChar("\nJ.-Jugar.\nS.-Sortir.\nC.-Cargar partida.\nOpció:");
 		}while(option != 'J' && option != 'C' && option != 'S');
 		return option;
 	}

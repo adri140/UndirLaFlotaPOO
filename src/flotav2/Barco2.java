@@ -1,6 +1,6 @@
 package flotav2;
 
-public class Barco2 extends Barco {
+public class Barco2 extends Barco implements java.io.Serializable {
 	private int x2;
 	private int y2;
 	

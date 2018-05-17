@@ -1,6 +1,6 @@
 package flotav2;
 //emmagatzema les tirades dels jugadors als taulells dels jugadors ribals.
-public class History {
+public class History implements java.io.Serializable {
 	private Player player;
 	private int x1;
 	private int y1;

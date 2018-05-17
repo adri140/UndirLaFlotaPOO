@@ -1,6 +1,6 @@
 package flotav2;
 
-public class Tab {
+public class Tab implements java.io.Serializable {
 	private Player propietaryTab;
 	private char[][] tablero;
 	private Barco[] barcos;
@@ -92,7 +92,25 @@ public class Tab {
 		return IA;
 	}
 	
+	public History[] getHistorial() {
+		return historial;
+	}
+	
+	public int getNumHistorial() {
+		return numHistorial;
+	}
+	
 	//Otros
+	public void TabClass_Clone(Tab tablero) {
+		this.barcos = tablero.getBarcos();
+		this.tablero = tablero.getTablero();
+		this.IA = tablero.getIA();
+		this.propietaryTab = tablero.getPropietaryTab();
+		this.numBarco = tablero.getNumBarco();
+		this.historial = tablero.getHistorial();
+		this.numHistorial = tablero.getNumHistorial();
+	}
+	
 	/**
 	 * Clona un barco en el array de los barcos
 	 * @param b
@@ -495,7 +513,6 @@ public class Tab {
 					if(tablero[x][y] == 'B') b = true;
 					historial[numHistorial] = new History(player, x, y, b, this);
 					numHistorial++;
-					System.out.println("Si");
 				}
 			}
 		}
