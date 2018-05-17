@@ -1,0 +1,25 @@
+-----------------------------Normas i avisos:---------------------------
+:::::::::::::::::Generacion o distribucion de barcos::::::::::::::::::::
+- Los barcos no se pueden tocar, es decir, tiene que haber un espacio de agua entre barco i barco en todas las direcciones.
+- Por defecto hay los siguientes barcos con su numero de posiciones.
+	@ Una lancha torpedera de 2 posiciones.
+	@ Un destructor de 3 posiciones.
+	@ Un submarino de 3 posiciones.
+	@ Un acorazado de 4 posiciones.
+	@ Un portaviones de 5 posiciones.
+- Los barcos no pueden salir del tablero.
+
+:::::::::::::::::::::::::::::::::Turnos:::::::::::::::::::::::::::::::::
+- Un jugador vs maquina.
+- Cada jugador tiene un disparo por cada turno, sin importar si ha tocado un barco enemigo, o lo a undido.
+- Aviso:: La maquina en modo dificil unde todos los barcos del oponente entre 50 i 70 turnos segun pruebas realizadas.
+- Por cada turno se muestra el tablero del jugador sin sus barcos (si no han sido encontrados), para que el jugador pueda ver el progreso de la maquina.
+- Por cada turno se muestra el tablero de la maquina sin sus barcos (si no han sido encontrados), para que el jugador pueda planear la tirada.
+- Al terminar el juego, se muestran los tableros, asi como sus corespondientes registros de disparos realizados.
+- Se mostrara la informacion de los barcos solo si la partida a terminado con algun ganador.
+- Aviso:: No se contempla la opcion de empate!!
+
+-------------------------------Otras notas:-----------------------------
+:::::::::::::Diferencia entre dificultad normal i dificil:::::::::::::::
+- En dificultad dificil realizara sus tiros de forma mas quidadosa, es decir, si ja ha encontrado un barco i esta undido, esta no disparara a ninguna posicion que se encuentre en
+a este barco, de forma que no malgaste el tiro disparando a una posicion en la qual seguro que no hay ningun barco.

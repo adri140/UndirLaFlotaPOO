@@ -1,0 +1,10 @@
+-----------------------Para guardar una partida:-----------------------
+1- Iniciar una partida i haver realizado al menus un tiro.
+2- Si no se ha terminado una partida i sales tienes la opción de guardar partida.
+3- Si guardas partida debes especificar la ruta para dos arxivos, un .part1 i un .part2, la ruta no tiene por que ser la misma; asegurate de que puedes escribir en esa carpeta.
+4- Al indicar la ruta no se debe especificar la extension (.part1 i .part2).
+
+------------------------Para cargar una partida:-----------------------
+1- Seleccionar en el menu principal la opcion de cargar 'C'.
+2- Indicar la ruta al arxivo con la extension .part1, sin indicar la extension, es decir, la ruta i el nombre del arxivo.
+3- Indicar la rita al arxivo con la extension .part2, exactamente igual que en el paso 2.
