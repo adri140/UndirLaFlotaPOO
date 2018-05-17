@@ -1,5 +1,9 @@
 package flotav2;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -86,5 +90,79 @@ public class Entradas {
 			}
 		}while(ok != true);
 		return input;
+	}
+	
+	public static void Cargar(Tab maquina, Tab player) {
+		String rutaFile = inputRutaFile();
+		File f = new File(rutaFile);
+		FileInputStream fis = null;
+		ObjectInputStream ois = null;
+		
+		try {
+		fis = new FileInputStream(f);
+		ois = new ObjectInputStream(fis);
+		
+		maquina = (Tab) ois.readObject();
+		player = (Tab) ois.readObject();
+		
+		}
+		catch(IOException e1) {
+			e1.printStackTrace();
+		}
+		catch(ClassNotFoundException e2) {
+			e2.printStackTrace();
+		}
+		finally {
+			try {
+				ois.close();
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public static String inputRutaFile() {
+		String ruta;
+		File f;
+		
+		System.out.print("Introdueix la ruta al fitxer. ");
+		ruta = Entradas.ScannerLine();
+		f = new File(ruta);
+		if(f.exists()) {
+			if(f.isDirectory()) {
+				System.out.print("Introdueix el nom del fitxer. ");
+				ruta = ruta + "/" + Entradas.ScannerLine();
+				f = new File(ruta);
+			}
+		}
+		
+		if(f.exists()) {
+			char a = Entradas.inpChar("Vols eliminar-lo? ");
+			switch(a) {
+			case 'S':
+				if(f.delete()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					System.out.println("Fitxer borrat.");
+				}
+				else System.out.println("Error al eliminar el fitxer.");
+				break;
+			}
+		}
+		else {
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ruta;
 	}
 }

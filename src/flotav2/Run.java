@@ -103,7 +103,7 @@ public class Run {
 		boolean guardar = false;
 		
 		do {
-			salir2 = newMenu(); //pregunta si quiere jugar, salir o cargar una partida.
+			salir2 = novoMenu(); //pregunta si quiere jugar, salir o cargar una partida.
 			if(salir2 != 'S') {
 				
 				if(salir2 == 'C') cargar = true;
@@ -207,5 +207,13 @@ public class Run {
 				}
 			}
 		}while(salir2 != 'S');
+	}
+	
+	public static char novoMenu() {
+		char option;
+		do {
+			option = Entradas.inpChar("J.-Jugar.\nS.-Sortir.\nC.-Cargar partida.\nOpció:");
+		}while(option != 'J' && option != 'C' && option != 'S');
+		return option;
 	}
 }
