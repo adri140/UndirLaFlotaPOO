@@ -102,15 +102,21 @@ public class Entradas {
 		Tab tablero = new Tab();
 		
 		try {
+			if(f.exists()) {
 			fis = new FileInputStream(f);
 			ois = new ObjectInputStream(fis);
 		
 			tablero.TabClass_Clone((Tab) ois.readObject());
+			}
+			else {
+				System.out.println("No existeix el fitxer.");
+				return null;
+			}
 		
-		if(ois != null) {
-			ois.close();
-			fis.close();
-		}
+			if(ois != null) {
+				ois.close();
+				fis.close();
+			}
 		
 		}
 		catch(IOException e1) {
@@ -136,7 +142,7 @@ public class Entradas {
 	public static String inputRutaFile(int p) {
 		String ruta;
 		File f;
-		System.out.print("Introdueix la ruta al fitxer. ");
+		System.out.print("Introdueix la ruta absoluta al fitxer. ");
 		ruta = Entradas.ScannerLine();
 		
 		f = new File(ruta);
@@ -178,7 +184,7 @@ public class Entradas {
 		}
 		else {
 			try {
-				f.createNewFile();
+				if(f.createNewFile() != true) System.out.println("No s'ha pogut crear el nou fitxer.");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
