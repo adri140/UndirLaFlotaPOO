@@ -639,7 +639,8 @@ public class Tab implements java.io.Serializable {
 				i++;
 				this.viewTab();
 				if(i == 2) System.out.println("\nIntrodueix les posicions pel vaixell de 3 posicions: ");
-				else System.out.println("\nIntrodueix les posicions pel vaixell de " + (i + 2) + " posicions: ");
+				else 
+					if(i < Tab.getMaxBarco()) System.out.println("\nIntrodueix les posicions pel vaixell de " + (i + 2) + " posicions: ");
 			}
 			else {
 			if(ok == true) i++;

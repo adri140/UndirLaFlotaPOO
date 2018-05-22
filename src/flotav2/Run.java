@@ -130,7 +130,7 @@ public class Run {
 					tabPlayer = new Tab(Player.PLAYER);		
 					tabPlayer.genTab(Player.PLAYER);
 					
-					tabPlayer.getIA().setDificultad(Entradas.inpDificult("Introdueix el nivell de la dificultat (1: normal, 2: dificil) "));
+					tabPlayer.getIA().setDificultad(Entradas.inpDificult("\nIntrodueix el nivell de la dificultat (1: normal, 2: dificil) "));
 					Entradas.ScannerLine();
 				}
 				salir = 'N';
